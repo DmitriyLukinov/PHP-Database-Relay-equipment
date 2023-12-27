@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
 import { router } from '@inertiajs/react';
 import { Link } from '@inertiajs/react'
@@ -8,6 +8,19 @@ import Table from 'react-bootstrap/Table';
 
 const Test = ({txt}) => {
 
+    const [tx, setTxt] = useState(txt);
+
+    async function serve(substation) {
+        const resp = await fetch(`/s?sbst=${substation}`, {
+            method: 'GET',
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+        });
+        const { data, url } = await resp.json();
+        setTxt(data);
+        window.history.pushState({}, '', url);
+        //resp.json().then(data=>{setTxt(data)})
+    }
+
     return (
         <>
             <Table striped bordered hover>
@@ -15,11 +28,10 @@ const Test = ({txt}) => {
                 <tr><th>Substation</th></tr>
             </thead>
             <tbody>
-                {txt.map(function(item, index){
+                {tx.map(function(item, index){
                     return <tr key={index}>
                         <td>
-                            {/* <Button variant='link' size='sm'> { item } </Button>*/}
-                            <Link href="/s" method="get" data={{ sbst: item }} preserveState>{item}</Link>
+                            <Button variant='link' size='sm' onClick={() => serve(item)}>{item}</Button>
                         </td>
                     </tr>
                 })}               

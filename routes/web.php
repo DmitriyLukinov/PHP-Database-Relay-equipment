@@ -16,8 +16,14 @@ Route::get('/', function () {
 Route::get('/s', function(Request $req){
     $data = $req->input('sbst');
     $fiders = Substation::getFiders($data);
-    Log::info($fiders);
-    return Inertia::render('Test', ['txt'=>$fiders]);
+
+    if($req->ajax()==true){
+        return response()->json(['data' => $fiders, 'url' => "/s?sbst=${data}"]);
+    }
+    else{
+        Log::info('XMLHttpRequest');
+        return Inertia::render('Test', ['txt'=>$fiders]); 
+    }
 });
 
 //Route::inertia('/s', 'Auxi');
