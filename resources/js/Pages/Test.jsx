@@ -15,10 +15,11 @@ const Test = ({txt}) => {
             method: 'GET',
             headers: {'X-Requested-With': 'XMLHttpRequest'},
         });
-        const { data, url } = await resp.json();
-        setTxt(data);
-        window.history.pushState({}, '', url);
-        //resp.json().then(data=>{setTxt(data)})
+
+        resp.json().then(({data, url})=>{
+            setTxt(data);
+            window.history.pushState({}, '', url);
+        })
     }
 
     return (
