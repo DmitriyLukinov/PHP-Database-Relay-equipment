@@ -15,17 +15,25 @@ class Message extends Controller
         $substations = Substation::getSubstations();
         return Inertia::render('Test', ['txt'=>$substations]);
     }
-    public function showFiders(Request $req)
+    public function showFiders(Request $req, $substation)
     {
-        $data = $req->input('sbst');
-        $fiders = Substation::getFiders($data);
+        $fiders = Substation::getFiders($substation);
 
-        if($req->hasHeader('X-Requested-With')==true){
-            return ['data' => $fiders, 'url' => "/s?sbst=${data}"];
-        }
-        else{
-            Log::info('XMLHttpRequest');
-            return Inertia::render('Test', ['txt'=>$fiders]); 
-        }
+        return $req->hasHeader('X-Requested-With')
+        ? ['data' => $fiders, 'url' => "/${substation}"]
+        : Inertia::render('Test', ['txt' => $fiders]);
+    }
+    public function showRelays(Request $req, $substation, $fider){
+        $subs_and_fider = Substation::getSubstationId($substation, $fider);
+        $relays = $subs_and_fider->getRelays()
+        ->select('relay_type', 'ac_dc', 'relay_current', 'year', 'quantity')->get()->toArray();
+
+        $relays = array_map(function($arr){
+            array_pop($arr); 
+            $arr=array_values($arr);
+            return $arr;
+        }, $relays);
+
+        Log::info($relays);
     }
 }

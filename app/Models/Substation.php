@@ -14,13 +14,6 @@ class Substation extends Model
     use HasFactory;
     protected $table = 'substation';
 
-    public function relays(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            CurrentRelay::class, 'substation_current_relay', 'fider_id', 'current_relay_id'
-        );
-    }
-
     static public function getSubstations()
     {
         $substations = self::select('substation')->distinct()->get();
@@ -39,5 +32,19 @@ class Substation extends Model
             $arr[]=$f['fider'];
         }
         return $arr;
+    }
+
+    static public function getSubstationId($substation, $fider)
+    {
+        $id = self::select('id')->where('substation',$substation)->where('fider',$fider)->get()->pluck('id');
+        $subs_and_fider = self::find($id[0]);
+        return $subs_and_fider;
+    }
+
+    public function getRelays(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            CurrentRelay::class, 'substation_current_relay', 'fider_id', 'current_relay_id'
+        );
     }
 }
