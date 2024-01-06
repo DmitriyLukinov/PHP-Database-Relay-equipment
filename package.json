@@ -13,12 +13,13 @@
     "dependencies": {
         "@inertiajs/inertia-react": "^0.8.1",
         "@inertiajs/react": "^1.0.14",
+        "@reduxjs/toolkit": "^2.0.1",
         "@vitejs/plugin-react": "^4.2.1",
         "bootstrap": "^5.3.2",
         "react": "^18.2.0",
         "react-bootstrap": "^2.9.1",
         "react-dom": "^18.2.0",
         "react-redux": "^9.0.4",
-        "redux": "^5.0.1"
+        "react-router-dom": "^6.21.1"
     }
 }

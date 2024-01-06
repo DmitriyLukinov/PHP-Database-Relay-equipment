@@ -20,7 +20,7 @@ class Message extends Controller
         $fiders = Substation::getFiders($substation);
 
         return $req->hasHeader('X-Requested-With')
-        ? ['data' => $fiders, 'url' => "/${substation}"]
+        ? ['fiders' => $fiders, 'url' => "/${substation}"]
         : Inertia::render('Test', ['txt' => $fiders]);
     }
     public function showRelays(Request $req, $substation, $fider){
