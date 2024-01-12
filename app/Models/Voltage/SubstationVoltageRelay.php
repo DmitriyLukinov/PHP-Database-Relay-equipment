@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Voltage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SubstationCurrentRelay extends Model
+class SubstationVoltageRelay extends Model
 {
     use HasFactory;
-    protected $table = 'substation_current_relay';
+    protected $table = 'substation_voltage_relay';
 }
