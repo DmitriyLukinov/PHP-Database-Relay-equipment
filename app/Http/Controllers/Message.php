@@ -14,6 +14,10 @@ class Message extends Controller
         $substations = Substation::getSubstations();
         return Inertia::render('Test', ['txt'=>$substations]);
     }
+    public function backToSubstations(){
+        $substations = Substation::getSubstations();
+        return ['substations' => $substations, 'url' => "/"];
+    }
     public function showFiders(Request $req, $substation){
         $fiders = Substation::getFiders($substation);
 
@@ -68,15 +72,8 @@ class Message extends Controller
     }
     public function showRelays(Request $req, $substation, $fider){
         $subs_and_fider = Substation::getSubstationId($substation, $fider);
-        $relays = $subs_and_fider->getRelays()
-        ->select('relay_type', 'ac_dc', 'relay_current', 'year', 'quantity')->get()->toArray();
-
-        $relays = array_map(function($arr){
-            array_pop($arr); 
-            $arr=array_values($arr);
-            return $arr;
-        }, $relays);
-
-        Log::info($relays);
+        $relays = $subs_and_fider->getRelays();
+        //Log::info($relays);
+        return Inertia::render('Relays', ['relays'=>$relays]);
     }
 }

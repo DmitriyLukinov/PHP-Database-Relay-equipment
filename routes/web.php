@@ -11,3 +11,4 @@ Route::put('/changeObjectSF', [Message::class, 'changeObjectSF']);
 Route::get('/', [Message::class, 'showSubstations']); 
 Route::get('/{substation}', [Message::class, 'showFiders']);
 Route::get('/{substation}/{fider}', [Message::class, 'showRelays']);
+Route::get('/return/to/substations', [Message::class, 'backToSubstations']);

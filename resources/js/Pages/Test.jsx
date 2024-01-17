@@ -57,7 +57,13 @@ const Test = ({txt}) => {
           <Card className="card">
             <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
               <Col className='headerCol'>
-                <Button className='navButton' variant="secondary" onClick={dispatch(()=>back())}>Back</Button>
+                <Button className='navButton' variant="secondary" 
+                  onClick={()=>{
+                    dispatch(back(name));
+                    setFunctionSwitch(true);
+                  }}>
+                  Back
+                </Button>
                 <Button className='navButton' variant="secondary" onClick={()=>dispatch(abort())}>Abort</Button>
                 <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
                 <div class="vertical-separator"></div>
@@ -67,11 +73,7 @@ const Test = ({txt}) => {
             </Navbar>
           </Card>
 
-          <Button className="addNew"
-            variant="primary" 
-            size="sm" 
-            id='add_tableSF' 
-            style={{ marginTop: '100px' }}
+          <Button className="addNew" variant="primary" size="sm" id='add_tableSF' style={{ marginTop: '100px' }}
             onClick={()=>{dispatch(addNew(row)); }}
           >
             Add new

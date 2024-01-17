@@ -43,9 +43,11 @@ class Substation extends Model
     }
 
     public function getRelays(){
-        $currentRelays = $this->belongsToMany(
-            CurrentRelay::class, 'substation_current_relay', 'fider_id', 'current_relay_id'
-        )->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity']);
+        $currentRelays = $this->belongsToMany(CurrentRelay::class, 'substation_current_relay', 'fider_id', 'current_relay_id')
+            ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])
+            ->toArray();
+        $currentRelays = array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);
+        Log::info($currentRelays);
         
         $voltageRelays = $this->belongsToMany(
             VoltageRelays::class, 'substation_voltage_relay', 'fider_id', 'voltage_relay_id'
@@ -59,6 +61,6 @@ class Substation extends Model
             CurrentTransformers::class, 'substation_current_transformers', 'fider_id', 'current_transformer_id'
         )->get(['type', 'coil_05', 'coil_10P', 'year', 'quantity']);
         
-        return [$currentRelays, $voltageRelays, $measuringInstruments, $currentTransformers];
+        return $currentRelays;
     }
 }

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { router } from '@inertiajs/react'
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 export const substationSlice = createSlice({
@@ -67,7 +68,8 @@ export const substationSlice = createSlice({
             else if(action.payload.res.items!=='deletion prohoibited' && action.payload.res.items!=='deletion approved')
             {state.substationOrFider = [...action.payload.res.items];}
         })
-        .addCase(back.fulfilled, (state)=>{
+        .addCase(back.fulfilled, (state, action)=>{
+            state.substationOrFider = [...action.payload.res.substations];
             state.name = 'Substation';
             state.row = "";
             state.itemToChange = "";
@@ -86,10 +88,7 @@ export const getFiders = createAsyncThunk('substation/getFiders', async (substat
 });
 
 export const getRelays = createAsyncThunk('substation/getRelays', async ({substation, fider})=>{
-    await fetch(`/${substation}/${fider}`, {
-        method: "GET",
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    });
+    router.get(`/${substation}/${fider}`, {headers: { 'X-Requested-With': 'XMLHttpRequest' }});
 })
 
 export const applyChanges = createAsyncThunk(
@@ -152,12 +151,17 @@ export const deleteObjectSF = createAsyncThunk( 'substation/deleteObjectSF', asy
     else throw new Error();
 })
 
-export const back = createAsyncThunk('substation/back', async ()=>{
-    const response = await fetch('/',{
-        method: "GET"
-    })
-    const res = await new Promise((resolve)=>{resolve()});
-    return {res};
+export const back = createAsyncThunk('substation/back', async (substation)=>{
+    if(substation!=='Substation'){
+        console.log('yes');
+        const response = await fetch('/return/to/substations',{
+            method: "GET"
+        })
+        const res = await response.json();
+        window.history.pushState({}, '', res.url);
+        return {res};
+    }
+    else throw new Error();
 })
 
 export const enableReducting = (index, row)=>{if(index === row){return true;}}
