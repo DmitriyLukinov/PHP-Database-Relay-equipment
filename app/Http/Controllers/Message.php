@@ -73,7 +73,9 @@ class Message extends Controller
     public function showRelays(Request $req, $substation, $fider){
         $subs_and_fider = Substation::getSubstationId($substation, $fider);
         $relays = $subs_and_fider->getRelays();
-        //Log::info($relays);
-        return Inertia::render('Relays', ['relays'=>$relays]);
+        return Inertia::render('Relays', 
+        ['currentRelays'=>$relays[0],'voltageRelays'=>$relays[1],
+        'measuringInstruments'=>$relays[2],'currentTransformers'=>$relays[3],
+        'substation'=>[$substation, $fider]]);
     }
 }

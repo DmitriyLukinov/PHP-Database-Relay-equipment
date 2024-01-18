@@ -47,20 +47,25 @@ class Substation extends Model
             ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])
             ->toArray();
         $currentRelays = array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);
-        Log::info($currentRelays);
         
         $voltageRelays = $this->belongsToMany(
-            VoltageRelays::class, 'substation_voltage_relay', 'fider_id', 'voltage_relay_id'
-        )->get(['relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity']);
+            VoltageRelays::class, 'substation_voltage_relay', 'fider_id', 'voltage_relay_id')
+           ->get(['relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity'])
+           ->toArray();
+        $voltageRelays = array_map(function($arr){array_pop($arr); return $arr;}, $voltageRelays);
 
         $measuringInstruments = $this->belongsToMany(
-            MeasuringInstruments::class, 'substation_measuring_instruments', 'fider_id', 'measuring_instrument_id'
-        )->get(['device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification']);
+            MeasuringInstruments::class, 'substation_measuring_instruments', 'fider_id', 'measuring_instrument_id')
+           ->get(['device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification'])
+           ->toArray();
+        $measuringInstruments = array_map(function($arr){array_pop($arr); return $arr;}, $measuringInstruments);
 
         $currentTransformers = $this->belongsToMany(
-            CurrentTransformers::class, 'substation_current_transformers', 'fider_id', 'current_transformer_id'
-        )->get(['type', 'coil_05', 'coil_10P', 'year', 'quantity']);
+            CurrentTransformers::class, 'substation_current_transformers', 'fider_id', 'current_transformer_id')
+            ->get(['type', 'coil_05', 'coil_10P', 'year', 'quantity'])
+            ->toArray();
+        $currentTransformers = array_map(function($arr){array_pop($arr); return $arr;}, $currentTransformers);
         
-        return $currentRelays;
+        return [$currentRelays, $voltageRelays, $measuringInstruments, $currentTransformers];
     }
 }

@@ -88,7 +88,7 @@ const Test = ({txt}) => {
                   <td>
                     {
                       enableReducting(index, row)
-                      ?<Field name="sbs_fider" type="text" className="form-control" autoFocus id='substationFider'/>
+                      ?<Field name="sbs_fider" type="text" autoFocus id='substationFider'/>
                       :<Button variant='link' size='sm' onClick={() => {fiders_relays(item, name)}}>
                         {item}
                       </Button>

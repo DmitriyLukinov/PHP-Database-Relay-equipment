@@ -1,11 +1,14 @@
 import React, {useEffect} from 'react';
 import { Formik, Form } from "formik";
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
-import { Button, Table, Card, Navbar, Col } from 'react-bootstrap';
+import { Button, Card, Navbar, Col } from 'react-bootstrap';
+import CurrentRelays from './relays/CurrentRelays';
+import VoltageRelays from './relays/VoltageRelays';
+import MeasuringInstruments from './relays/MeasuringInstruments';
+import CurrentTransformers from './relays/CurrentTransformers';
 
-const Relays = ({relays})=>{
 
-    useEffect(()=>{console.log(relays)},[])
+const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
     return(
         <>
@@ -20,10 +23,15 @@ const Relays = ({relays})=>{
                                 <div class="vertical-separator"></div>
                                 <Button className='navButton' variant="info">Filter</Button>
                             </Col>
-                            <h4>OOO</h4>
+                            <h4>{substation[0]}-</h4><h4>{substation[1]}  </h4>
                             <h1>Relay equipment</h1>
                         </Navbar>
                     </Card>
+
+                    <CurrentRelays currentRelays={currentRelays}/>
+                    <VoltageRelays voltageRelays={voltageRelays}/>
+                    <MeasuringInstruments measuringInstruments={measuringInstruments}/>
+                    <CurrentTransformers currentTransformers={currentTransformers}/>
                 </Form>
             </Formik>
         </>

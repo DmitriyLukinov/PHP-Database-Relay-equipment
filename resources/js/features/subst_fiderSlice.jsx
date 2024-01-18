@@ -88,7 +88,7 @@ export const getFiders = createAsyncThunk('substation/getFiders', async (substat
 });
 
 export const getRelays = createAsyncThunk('substation/getRelays', async ({substation, fider})=>{
-    router.get(`/${substation}/${fider}`, {headers: { 'X-Requested-With': 'XMLHttpRequest' }});
+    router.get(`/${substation}/${fider}`);
 })
 
 export const applyChanges = createAsyncThunk(
