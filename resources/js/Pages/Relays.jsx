@@ -23,7 +23,7 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                                 <div class="vertical-separator"></div>
                                 <Button className='navButton' variant="info">Filter</Button>
                             </Col>
-                            <h4>{substation[0]}-</h4><h4>{substation[1]}  </h4>
+                            <h4>{substation[0]}-</h4><h4>{substation[1]}</h4>
                             <h1>Relay equipment</h1>
                         </Navbar>
                     </Card>

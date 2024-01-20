@@ -5,6 +5,9 @@ import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import {getCurrentTrans, enableReducting, getItemNames, selectCurrentTrans, selecttableCellParams
 } from '../../features/relaysSlice';
+import DropDown1 from '../components/DropDown1';
+import DropDown2 from '../components/DropDown2';
+import DropDown3 from '../components/DropDown3';
 
 export default function CurrentTransformers({currentTransformers}){
 
@@ -45,38 +48,37 @@ export default function CurrentTransformers({currentTransformers}){
                 <tbody>
                     { transes.map((trans, index)=>{
                         return <tr key={index}>
-                            <td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {   
                                     enableReducting(tableCellParams, index, 0, "transTable")
-                                    ? <Button variant="danger" size="sm">Delete</Button> : trans.type                                  
+                                    ? <DropDown1 /> : trans.type                                  
                                 }
                             </td>
-                            <td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "transTable")
-                                    ? <Button variant="danger" size="sm">Delete</Button> :trans.coil_05
+                                    ? <DropDown2 /> :trans.coil_05
                                 }
                             </td>
-                            <td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "transTable")
-                                    ? <Field as="select"/> :trans.coil_10P
+                                    ? <DropDown3 /> :trans.coil_10P
                                 }
                             </td>
-                            <td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "transTable")
                                     ? <Field size="sm" type="text" autoFocus/> :trans.year
                                 }
                             </td>
-                            <td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "transTable")
                                     ? <Field size="sm" type="text" autoFocus/> :trans.quantity
                                 }
                             </td>
-                            <td><Button variant="danger" size="sm" onClick={()=>{
-                                console.log('kkk'); dispatch(getItemNames())}}>
+                            <td><Button variant="danger" size="sm">
                                 Delete</Button>
                             </td>
                         </tr>
