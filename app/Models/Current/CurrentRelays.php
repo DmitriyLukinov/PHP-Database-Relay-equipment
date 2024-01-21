@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models\Measuring;
+namespace App\Models\Current;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MeasuringInstruments extends Model
+class CurrentRelays extends Model
 {
     use HasFactory;
-    protected $table = 'measuring_instruments';
+    protected $table = 'current_relay';
     public $timestamps = false;
 
     private static function getItems($string){
@@ -19,15 +19,11 @@ class MeasuringInstruments extends Model
     static public function getDistinctItems($column){
         switch($column){
             case '0':
-                $arr = self::getItems('device');
+                $arr = self::getItems('relay_type');
                 return $arr;
             break; 
-            case '1':
-                $arr = self::getItems('device_type');
-                return $arr;
-            break;
             case '2':
-                $arr = self::getItems('measurement_limit');
+                $arr = self::getItems('relay_current');
                 return $arr;
             break;
         }

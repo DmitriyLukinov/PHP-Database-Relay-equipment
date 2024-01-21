@@ -3,11 +3,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getVoltageRelays, selectVoltageRelays} from '../../features/relaysSlice';
+import {getVoltageRelays, enableReducting, getItemNames, selectVoltageRelays, selecttableCellParams
+} from '../../features/relaysSlice';
+import DropDown1 from '../components/DropDown1';
+import DropDownACDC from '../components/DropDownACDC';
 
 export default function CurrentRelays({voltageRelays}){
 
     const relays = useSelector(selectVoltageRelays);
+    const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(getVoltageRelays({voltageRelays}));
@@ -38,12 +42,39 @@ export default function CurrentRelays({voltageRelays}){
                 <tbody>
                     { relays.map((relay, index)=>{
                         return <tr key={index}>
-                            <td>{relay.relay_type}</td>
-                            <td>{relay.ac_dc}</td>
-                            <td>{relay.relay_voltage}</td>
-                            <td>{relay.year}</td>
-                            <td>{relay.quantity}</td>
-                            <td><Button variant="danger" size="sm">Delete</Button></td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 0, "voltageTable") 
+                                    ? <DropDown1 /> : relay.relay_type
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 1, "voltageTable") 
+                                    ? <DropDownACDC /> : relay.ac_dc
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 2, "voltageTable") 
+                                    ? <Field size="sm" type="text" autoFocus/> :relay.relay_voltage
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 3, "voltageTable") 
+                                    ? <Field size="sm" type="text" autoFocus/> : relay.year
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 4, "voltageTable") 
+                                    ? <Field size="sm" type="text" autoFocus/> : relay.quantity
+                                }
+                            </td>
+                            <td>
+                                <Button variant="danger" size="sm">Delete</Button>
+                            </td>
                         </tr>
                     })}
                 </tbody>

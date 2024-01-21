@@ -12,13 +12,13 @@ class CurrentTransformers extends Model
     protected $table = 'current_transformers';
     public $timestamps = false;
 
-    static public function getDistinctItems($column, $tableID){
-        if($column==='0' && $tableID==='transTable'){          
+    static public function getDistinctItems($column){
+        if($column==='0'){          
             $items = self::select('type')->distinct()->get()->toArray();
             $arr = array_map(fn($item)=>$item['type'], $items); 
             return $arr;
         }
-        if(($column==='1' || $column==='2')&& $tableID==='transTable'){
+        if($column==='1' || $column==='2'){
             $coil_05 = self::select('coil_05')->distinct()->get()->toArray();
             $coil_10P = self::select('coil_10P')->distinct()->get()->toArray();
             $coil_05 = array_map(fn($i)=>$i=$i['coil_05'], $coil_05);

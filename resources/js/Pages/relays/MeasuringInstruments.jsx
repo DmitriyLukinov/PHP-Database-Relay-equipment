@@ -3,11 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getMeasuringInstruments, selectMeasuringInstruments} from '../../features/relaysSlice';
+import {getMeasuringInstruments, enableReducting, getItemNames, selectMeasuringInstruments, selecttableCellParams
+} from '../../features/relaysSlice';
+import DropDown1 from '../components/DropDown1';
+import DropDown2 from '../components/DropDown2';
+import DropDown3 from '../components/DropDown3';
 
 export default function MeasuringInstruments({measuringInstruments}){
 
     const instruments = useSelector(selectMeasuringInstruments);
+    const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(getMeasuringInstruments({measuringInstruments}));
@@ -43,12 +48,42 @@ export default function MeasuringInstruments({measuringInstruments}){
                 <tbody>
                     { instruments.map((item, index)=>{
                         return <tr key={index}>
-                            <td>{item.device}</td>
-                            <td>{item.device_type}</td>
-                            <td>{item.measurement_limit}</td>
-                            <td>{item.year}</td>
-                            <td>{item.quantity}</td>
-                            <td>{item.next_verification}</td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 0, "measuringTable")
+                                    ? <DropDown1 /> : item.device
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 1, "measuringTable")
+                                    ? <DropDown2 /> : item.device_type
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 2, "measuringTable")
+                                    ? <DropDown3 /> :item.measurement_limit
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 3, "measuringTable")
+                                    ? <Field size="sm" type="text" autoFocus/> : item.year
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 4, "measuringTable")
+                                    ? <Field size="sm" type="text" autoFocus/> : item.quantity
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 5, "measuringTable")
+                                    ? <Field size="sm" type="text" autoFocus/> : item.next_verification
+                                }
+                            </td>
                             <td><Button variant="danger" size="sm">Delete</Button></td>
                         </tr>
                     })}

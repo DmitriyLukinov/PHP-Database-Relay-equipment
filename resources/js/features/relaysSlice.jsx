@@ -12,16 +12,43 @@ export const relaysSlice = createSlice({
         dropDown1: [],
         dropDown2: [],
         dropDown3: [],
+
+        itemToChange: [],
     },
     reducers:{
         getCurrentRelays: (state, action)=>{state.currentRelays = [...action.payload.currentRelays];},
         getVoltageRelays: (state, action)=>{state.voltageRelays = [...action.payload.voltageRelays];},
         getMeasuringInstruments: (state, action)=>{state.measuringInstruments = [...action.payload.measuringInstruments];},
         getCurrentTrans: (state, action)=>{state.currentTransformers = [...action.payload.currentTransformers];},
+
+        abort: (state)=>{
+            state.tableCellParams = [];
+            state.dropDown1 = [];
+            state.dropDown2 = [];
+            state.dropDown3 = [];
+            state.itemToChange = [];
+        }
     },
     extraReducers: (builder)=>{
         builder.addCase(getItemNames.fulfilled, (state,action)=>{
-            if(state.tableCellParams.length===0 || state.tableCellParams.at(-1).row===action.payload.row){
+            if(state.tableCellParams.length===0 || (state.tableCellParams.at(-1).row===action.payload.row && state.tableCellParams.at(-1).table===action.payload.tableID)){
+                if(state.tableCellParams.length===0){
+                    let t = document.getElementById(action.payload.tableID);
+                    let arr = [];
+                    if(action.payload.tableID==="measuringTable"){
+                        for(let i=0; i<6; ++i){
+                            let item = t.rows[action.payload.row+1].cells[i].innerText;
+                            arr.push(item);
+                        }
+                    }
+                    else{
+                        for(let i=0; i<5; ++i){
+                            let item = t.rows[action.payload.row+1].cells[i].innerText;
+                            arr.push(item);
+                        }
+                    }
+                    state.itemToChange = [...arr];
+                }
                 let arr = [...state.tableCellParams];
                 arr.push({
                     row: action.payload.row,
@@ -29,17 +56,28 @@ export const relaysSlice = createSlice({
                     table: action.payload.tableID
                 });
                 state.tableCellParams = [...arr];
-            }
 
-            if(action.payload.column===0 && action.payload.tableID==='transTable'){
-                state.dropDown1 = [...action.payload.items];
-            }
-            if((action.payload.column===1 || action.payload.column===2) && action.payload.tableID==='transTable'){
-                state.dropDown2 = [...action.payload.items];
-                state.dropDown3 = [...action.payload.items];
-            }
-            if(action.payload.column===0 && action.payload.tableID==='measuringTable'){
-                state.dropDown1 = [...action.payload.items];
+                switch(action.payload.tableID){
+                    case 'currentTable':
+                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];                                           
+                        if(action.payload.column===2) state.dropDown2 = [...action.payload.items];
+                    break;                        
+                    case 'voltageTable':
+                        state.dropDown1 = [...action.payload.items];
+                    break;
+                    case 'measuringTable':
+                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];                                           
+                        if(action.payload.column===1) state.dropDown2 = [...action.payload.items];                        
+                        if(action.payload.column===2 ) state.dropDown3 = [...action.payload.items];
+                    break;
+                    case 'transTable':
+                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];
+                        if((action.payload.column===1 || action.payload.column===2)){
+                            state.dropDown2 = [...action.payload.items];
+                            state.dropDown3 = [...action.payload.items];
+                        }
+                    break;
+                }
             }
         })
     }
@@ -71,6 +109,8 @@ export const selecttableCellParams = (state)=>state.relays.tableCellParams
 export const selectdropDown1 = (state)=>state.relays.dropDown1
 export const selectdropDown2 = (state)=>state.relays.dropDown2
 export const selectdropDown3 = (state)=>state.relays.dropDown3
-export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans,
+
+export const selectItemToChange = (state)=>state.relays.itemToChange
+export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort
 } = relaysSlice.actions
 export default relaysSlice.reducer

@@ -3,11 +3,16 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getCurrentRelays, selectCurrentRelays} from '../../features/relaysSlice';
+import {getCurrentRelays, enableReducting, getItemNames, selectCurrentRelays, selecttableCellParams
+} from '../../features/relaysSlice';
+import DropDown1 from '../components/DropDown1';
+import DropDown2 from '../components/DropDown2';
+import DropDownACDC from '../components/DropDownACDC';
 
 export default function CurrentRelays({currentRelays}){
 
     const relays = useSelector(selectCurrentRelays);
+    const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(getCurrentRelays({currentRelays}));
@@ -44,12 +49,39 @@ export default function CurrentRelays({currentRelays}){
                 <tbody>
                     { relays.map((relay, index)=>{
                         return <tr key={index}>
-                            <td>{relay.relay_type}</td>
-                            <td>{relay.ac_dc}</td>
-                            <td>{relay.relay_current}</td>
-                            <td>{relay.year}</td>
-                            <td>{relay.quantity}</td>
-                            <td><Button variant="danger" size="sm" >Delete</Button></td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 0, "currentTable") 
+                                    ? <DropDown1 /> : relay.relay_type
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 1, "currentTable") 
+                                    ? <DropDownACDC /> : relay.ac_dc
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 2, "currentTable") 
+                                    ? <DropDown2 /> : relay.relay_current
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 3, "currentTable") 
+                                    ? <Field size="sm" type="text" autoFocus/> : relay.year
+                                }
+                            </td>
+                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                                {
+                                    enableReducting(tableCellParams, index, 4, "currentTable") 
+                                    ? <Field size="sm" type="text" autoFocus/> : relay.quantity
+                                }
+                            </td>
+                            <td>
+                                <Button variant="danger" size="sm" >Delete</Button>
+                            </td>
                         </tr>
                     })}
                 </tbody>

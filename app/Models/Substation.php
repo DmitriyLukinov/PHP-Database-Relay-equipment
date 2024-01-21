@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Models\Current\CurrentRelay;
+use App\Models\Current\CurrentRelays;
 use App\Models\Voltage\VoltageRelays;
 use App\Models\Measuring\MeasuringInstruments;
 use App\Models\Transformers\CurrentTransformers;
@@ -43,7 +43,7 @@ class Substation extends Model
     }
 
     public function getRelays(){
-        $currentRelays = $this->belongsToMany(CurrentRelay::class, 'substation_current_relay', 'fider_id', 'current_relay_id')
+        $currentRelays = $this->belongsToMany(CurrentRelays::class, 'substation_current_relay', 'fider_id', 'current_relay_id')
             ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])
             ->toArray();
         $currentRelays = array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);

@@ -6,9 +6,13 @@ import CurrentRelays from './relays/CurrentRelays';
 import VoltageRelays from './relays/VoltageRelays';
 import MeasuringInstruments from './relays/MeasuringInstruments';
 import CurrentTransformers from './relays/CurrentTransformers';
+import { useSelector, useDispatch } from 'react-redux';
+import {abort} from '../features/relaysSlice';
 
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
+
+    const dispatch = useDispatch();
 
     return(
         <>
@@ -18,8 +22,12 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                         <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
                             <Col className='headerCol'>
                                 <Button className='navButton' variant="secondary" >Back</Button>
-                                <Button className='navButton' variant="secondary">Abort</Button>
-                                <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
+                                <Button className='navButton' variant="secondary" onClick={()=>dispatch(abort())}>
+                                    Abort
+                                </Button>
+                                <Button className='navButton' variant="secondary" type="submit">
+                                    Apply changes
+                                </Button>
                                 <div class="vertical-separator"></div>
                                 <Button className='navButton' variant="info">Filter</Button>
                             </Col>
