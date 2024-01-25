@@ -9,7 +9,7 @@ import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
 import DropDown3 from '../components/DropDown3';
 
-export default function MeasuringInstruments({measuringInstruments}){
+export default function MeasuringInstruments({measuringInstruments, setFieldValue}){
 
     const instruments = useSelector(selectMeasuringInstruments);
     const tableCellParams = useSelector(selecttableCellParams);
@@ -51,37 +51,37 @@ export default function MeasuringInstruments({measuringInstruments}){
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 0, "measuringTable")
-                                    ? <DropDown1 /> : item.device
+                                    ? <DropDown1 setFieldValue={setFieldValue}/> : item.device
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "measuringTable")
-                                    ? <DropDown2 /> : item.device_type
+                                    ? <DropDown2 setFieldValue={setFieldValue}/> : item.device_type
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "measuringTable")
-                                    ? <DropDown3 /> :item.measurement_limit
+                                    ? <DropDown3 setFieldValue={setFieldValue}/> :item.measurement_limit
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "measuringTable")
-                                    ? <Field size="sm" type="text" autoFocus/> : item.year
+                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> : item.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "measuringTable")
-                                    ? <Field size="sm" type="text" autoFocus/> : item.quantity
+                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> : item.quantity
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 5, "measuringTable")
-                                    ? <Field size="sm" type="text" autoFocus/> : item.next_verification
+                                    ? <Field name="newRelayParam[5]" size="sm" type="text" autoFocus/> : item.next_verification
                                 }
                             </td>
                             <td><Button variant="danger" size="sm">Delete</Button></td>

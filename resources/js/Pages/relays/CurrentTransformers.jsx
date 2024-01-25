@@ -9,7 +9,7 @@ import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
 import DropDown3 from '../components/DropDown3';
 
-export default function CurrentTransformers({currentTransformers}){
+export default function CurrentTransformers({currentTransformers, setFieldValue}){
 
     const transes = useSelector(selectCurrentTrans);
     const tableCellParams = useSelector(selecttableCellParams);
@@ -51,31 +51,31 @@ export default function CurrentTransformers({currentTransformers}){
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {   
                                     enableReducting(tableCellParams, index, 0, "transTable")
-                                    ? <DropDown1 /> : trans.type                                  
+                                    ? <DropDown1 setFieldValue={setFieldValue}/> : trans.type                                  
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "transTable")
-                                    ? <DropDown2 /> :trans.coil_05
+                                    ? <DropDown2 setFieldValue={setFieldValue}/> :trans.coil_05
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "transTable")
-                                    ? <DropDown3 /> :trans.coil_10P
+                                    ? <DropDown3 setFieldValue={setFieldValue}/> :trans.coil_10P
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "transTable")
-                                    ? <Field size="sm" type="text" autoFocus/> :trans.year
+                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> :trans.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "transTable")
-                                    ? <Field size="sm" type="text" autoFocus/> :trans.quantity
+                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> :trans.quantity
                                 }
                             </td>
                             <td><Button variant="danger" size="sm">

@@ -8,7 +8,7 @@ import {getVoltageRelays, enableReducting, getItemNames, selectVoltageRelays, se
 import DropDown1 from '../components/DropDown1';
 import DropDownACDC from '../components/DropDownACDC';
 
-export default function CurrentRelays({voltageRelays}){
+export default function CurrentRelays({voltageRelays, setFieldValue}){
 
     const relays = useSelector(selectVoltageRelays);
     const tableCellParams = useSelector(selecttableCellParams);
@@ -42,34 +42,39 @@ export default function CurrentRelays({voltageRelays}){
                 <tbody>
                     { relays.map((relay, index)=>{
                         return <tr key={index}>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e) => {
+                                dispatch(getItemNames(e));                                
+                            }}>
                                 {
                                     enableReducting(tableCellParams, index, 0, "voltageTable") 
-                                    ? <DropDown1 /> : relay.relay_type
+                                    ? <DropDown1 setFieldValue={setFieldValue}/> : relay.relay_type
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "voltageTable") 
-                                    ? <DropDownACDC /> : relay.ac_dc
+                                    ? <DropDownACDC setFieldValue={setFieldValue}/> : relay.ac_dc
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "voltageTable") 
-                                    ? <Field size="sm" type="text" autoFocus/> :relay.relay_voltage
+                                    ? <Field name="newRelayParam[2]" size="sm" type="text" autoFocus/> 
+                                    : relay.relay_voltage
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "voltageTable") 
-                                    ? <Field size="sm" type="text" autoFocus/> : relay.year
+                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> 
+                                    : relay.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "voltageTable") 
-                                    ? <Field size="sm" type="text" autoFocus/> : relay.quantity
+                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> 
+                                    : relay.quantity
                                 }
                             </td>
                             <td>

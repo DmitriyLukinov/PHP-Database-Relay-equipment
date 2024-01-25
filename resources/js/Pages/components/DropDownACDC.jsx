@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Field } from 'formik';
 
-export default function DropDownACDC(){
+export default function DropDownACDC({setFieldValue}) {
 
-    return(
-        <Field as="select">
-            <option>~</option>
-            <option>=</option>
+    useEffect(()=>{setFieldValue("newRelayParam[1]", "~")}, []);
+
+    return (
+        <Field name="newRelayParame[1]" as="select" >
+            <option value="~">~</option>
+            <option value="=">=</option>
         </Field>
     );
 }

@@ -30,7 +30,8 @@ export const relaysSlice = createSlice({
         }
     },
     extraReducers: (builder)=>{
-        builder.addCase(getItemNames.fulfilled, (state,action)=>{
+        builder
+        .addCase(getItemNames.fulfilled, (state,action)=>{
             if(state.tableCellParams.length===0 || (state.tableCellParams.at(-1).row===action.payload.row && state.tableCellParams.at(-1).table===action.payload.tableID)){
                 if(state.tableCellParams.length===0){
                     let t = document.getElementById(action.payload.tableID);
@@ -60,10 +61,10 @@ export const relaysSlice = createSlice({
                 switch(action.payload.tableID){
                     case 'currentTable':
                         if(action.payload.column===0) state.dropDown1 = [...action.payload.items];                                           
-                        if(action.payload.column===2) state.dropDown2 = [...action.payload.items];
+                        if(action.payload.column===2) state.dropDown3 = [...action.payload.items];
                     break;                        
                     case 'voltageTable':
-                        state.dropDown1 = [...action.payload.items];
+                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];
                     break;
                     case 'measuringTable':
                         if(action.payload.column===0) state.dropDown1 = [...action.payload.items];                                           
@@ -80,6 +81,10 @@ export const relaysSlice = createSlice({
                 }
             }
         })
+        .addCase(applyChanges.fulfilled, ()=>{
+            console.log('yes');
+        })
+
     }
 })
 
@@ -91,6 +96,9 @@ export const getItemNames = createAsyncThunk('relays/getItemNames', async (e)=>{
     const response = await fetch(`/show/item/names?column=${column}&tableID=${tableID}`,{method:'GET'});
     const items = await response.json();
     return {items, row, column, tableID };
+})
+export const applyChanges = createAsyncThunk('relays/applyChanges', async ()=>{
+    console.log('ppp');
 })
 
 export const enableReducting = (cellArray, row, column, table)=>{
@@ -111,6 +119,7 @@ export const selectdropDown2 = (state)=>state.relays.dropDown2
 export const selectdropDown3 = (state)=>state.relays.dropDown3
 
 export const selectItemToChange = (state)=>state.relays.itemToChange
+
 export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort
 } = relaysSlice.actions
 export default relaysSlice.reducer

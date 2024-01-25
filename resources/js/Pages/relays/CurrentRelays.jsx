@@ -6,10 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import {getCurrentRelays, enableReducting, getItemNames, selectCurrentRelays, selecttableCellParams
 } from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
-import DropDown2 from '../components/DropDown2';
+import DropDown3 from '../components/DropDown3';
 import DropDownACDC from '../components/DropDownACDC';
 
-export default function CurrentRelays({currentRelays}){
+export default function CurrentRelays({currentRelays, setFieldValue}){
 
     const relays = useSelector(selectCurrentRelays);
     const tableCellParams = useSelector(selecttableCellParams);
@@ -52,31 +52,31 @@ export default function CurrentRelays({currentRelays}){
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 0, "currentTable") 
-                                    ? <DropDown1 /> : relay.relay_type
+                                    ? <DropDown1 setFieldValue={setFieldValue}/> : relay.relay_type
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "currentTable") 
-                                    ? <DropDownACDC /> : relay.ac_dc
+                                    ? <DropDownACDC setFieldValue={setFieldValue}/> : relay.ac_dc
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "currentTable") 
-                                    ? <DropDown2 /> : relay.relay_current
+                                    ? <DropDown3 setFieldValue={setFieldValue}/> : relay.relay_current
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "currentTable") 
-                                    ? <Field size="sm" type="text" autoFocus/> : relay.year
+                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> : relay.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "currentTable") 
-                                    ? <Field size="sm" type="text" autoFocus/> : relay.quantity
+                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> : relay.quantity
                                 }
                             </td>
                             <td>
