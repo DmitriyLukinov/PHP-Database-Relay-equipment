@@ -51,22 +51,19 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {   
                                     enableReducting(tableCellParams, index, 0, "transTable")
-                                    // ? <DropDown1 setFieldValue={setFieldValue}/> : trans.type    
-                                    ? <p>ooo</p> : trans.type                              
+                                    ? <DropDown1 setFieldValue={setFieldValue}/> : trans.type                                 
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "transTable")
-                                    //? <DropDown2 setFieldValue={setFieldValue}/> :trans.coil_05
-                                    ? <p>ooo</p> : trans.coil_05
+                                    ? <DropDown2 setFieldValue={setFieldValue}/> :trans.coil_05
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "transTable")
                                     ? <DropDown3 setFieldValue={setFieldValue}/> :trans.coil_10P
-                                    //? <p>ooo</p> : trans.coil_10P
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
