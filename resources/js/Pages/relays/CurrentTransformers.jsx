@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getCurrentTrans, enableReducting, getItemNames, selectCurrentTrans, selecttableCellParams
+import {getCurrentTrans, enableReducting, getItemNames, addNew, selectCurrentTrans, selecttableCellParams
 } from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
@@ -21,8 +21,8 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
     return(
         <>
             <Row className ='tableLabel'>
-                <Button 
-                    className="addNew" 
+                <Button onClick={(e)=>dispatch(addNew(e))}
+                    className="addNew" type="button"
                     variant="primary" size="sm" id="add_transTable"
                 >
                     Add new
@@ -51,19 +51,22 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {   
                                     enableReducting(tableCellParams, index, 0, "transTable")
-                                    ? <DropDown1 setFieldValue={setFieldValue}/> : trans.type                                  
+                                    // ? <DropDown1 setFieldValue={setFieldValue}/> : trans.type    
+                                    ? <p>ooo</p> : trans.type                              
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "transTable")
-                                    ? <DropDown2 setFieldValue={setFieldValue}/> :trans.coil_05
+                                    //? <DropDown2 setFieldValue={setFieldValue}/> :trans.coil_05
+                                    ? <p>ooo</p> : trans.coil_05
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "transTable")
                                     ? <DropDown3 setFieldValue={setFieldValue}/> :trans.coil_10P
+                                    //? <p>ooo</p> : trans.coil_10P
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(getItemNames(e))}}>

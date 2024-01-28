@@ -27,6 +27,29 @@ export const relaysSlice = createSlice({
             state.dropDown2 = [];
             state.dropDown3 = [];
             state.itemToChange = [];
+        },
+        addNew: (state, action)=>{
+            switch(action.payload.currentTarget.id){
+                case 'add_currentTable':
+                    state.currentRelays.push({});
+                break;
+                case 'add_voltageTable':
+                    state.voltageRelays.push({});
+                break;
+                case 'add_measuringTable':
+                    state.measuringInstruments.push({});
+                break;
+                case 'add_transTable':
+                    for(let i=0; i<5; ++i){
+                        state.tableCellParams.push({
+                            row: state.currentTransformers.length,
+                            column: i, 
+                            table: 'transTable',
+                        });
+                    }
+                    state.currentTransformers.push({});
+                break;
+            }
         }
     },
     extraReducers: (builder)=>{
@@ -97,6 +120,7 @@ export const getItemNames = createAsyncThunk('relays/getItemNames', async (e)=>{
     const items = await response.json();
     return {items, row, column, tableID };
 })
+
 export const applyChanges = createAsyncThunk('relays/applyChanges', async ()=>{
     console.log('ppp');
 })
@@ -120,6 +144,6 @@ export const selectdropDown3 = (state)=>state.relays.dropDown3
 
 export const selectItemToChange = (state)=>state.relays.itemToChange
 
-export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort
+export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort, addNew
 } = relaysSlice.actions
 export default relaysSlice.reducer

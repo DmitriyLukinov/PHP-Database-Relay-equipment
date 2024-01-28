@@ -13,8 +13,7 @@ import {abort, applyChanges, selectItemToChange, selecttableCellParams, selectdr
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
-    const dropDownRelays = useSelector(selectdropDown1);
-    const itemToChange = useSelector(selectItemToChange);
+    let oldItem = useSelector(selectItemToChange);
     const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
 
@@ -22,43 +21,43 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
         <>
         <Formik 
             initialValues={{
-                formikCurrent: currentRelays,
-                formikVoltage: voltageRelays,
-                formikMeasuring: measuringInstruments,
-                formikTrans: currentTransformers,
                 newRelayParam:['','','','','',''],
             }}
             onSubmit={(values)=>{
-                //console.log(values.formikVoltage[tableCellParams.at(-1).row]);
-                console.log(values.newRelayParam);
+                let newItem = [...oldItem];
+                values.newRelayParam.map((item, index)=>{if(item!=='') newItem[index]=item});
+                console.log(oldItem);
+                console.log(newItem);
             }}>
             {
-                ({ setFieldValue, setValues }) =>(<Form>
-                    <Card className="card">
-                        <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
-                            <Col className='headerCol'>
-                                <Button className='navButton' variant="secondary" >Back</Button>
-                                <Button className='navButton' variant="secondary" type="button"
-                                    onClick={()=>{
-                                        dispatch(abort());
-                                        setValues({newRelayParam:['','','','','','']});                                                                          
-                                    }}>
-                                    Abort
-                                </Button>
-                                <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
-                                <div class="vertical-separator"></div>
-                                <Button className='navButton' variant="info">Filter</Button>
-                            </Col>
-                            <h4>{substation[0]}-</h4><h4>{substation[1]}</h4>
-                            <h1>Relay equipment</h1>
-                        </Navbar>
-                    </Card>
+                ({ setFieldValue, setValues }) =>(
+                    <Form>
+                        <Card className="card">
+                            <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
+                                <Col className='headerCol'>
+                                    <Button className='navButton' variant="secondary" >Back</Button>
+                                    <Button className='navButton' variant="secondary" type="button"
+                                        onClick={()=>{
+                                            dispatch(abort());
+                                            setValues({newRelayParam:['','','','','','']});                                                                       
+                                        }}>
+                                        Abort
+                                    </Button>
+                                    <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
+                                    <div class="vertical-separator"></div>
+                                    <Button className='navButton' variant="info">Filter</Button>
+                                </Col>
+                                <h4>{substation[0]}-</h4><h4>{substation[1]}</h4>
+                                <h1>Relay equipment</h1>
+                            </Navbar>
+                        </Card>
 
-                    <CurrentRelays currentRelays={currentRelays} setFieldValue={setFieldValue}/>
-                    <VoltageRelays voltageRelays={voltageRelays} setFieldValue={setFieldValue}/>
-                    <MeasuringInstruments measuringInstruments={measuringInstruments} setFieldValue={setFieldValue}/>
-                    <CurrentTransformers currentTransformers={currentTransformers} setFieldValue={setFieldValue}/>
-                </Form>)
+                        <CurrentRelays currentRelays={currentRelays} setFieldValue={setFieldValue}/>
+                        <VoltageRelays voltageRelays={voltageRelays} setFieldValue={setFieldValue}/>
+                        <MeasuringInstruments measuringInstruments={measuringInstruments} setFieldValue={setFieldValue}/>
+                        <CurrentTransformers currentTransformers={currentTransformers} setFieldValue={setFieldValue}/>
+                    </Form>
+                )
             }
         </Formik>
         </>
