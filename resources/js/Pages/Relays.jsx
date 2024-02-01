@@ -7,7 +7,7 @@ import VoltageRelays from './relays/VoltageRelays';
 import MeasuringInstruments from './relays/MeasuringInstruments';
 import CurrentTransformers from './relays/CurrentTransformers';
 import { useSelector, useDispatch } from 'react-redux';
-import {abort, applyChanges, selectItemToChange, selecttableCellParams, selectdropDown1
+import {abort, selectItemToChange, selecttableCellParams, selectdropDown1
 } from '../features/relaysSlice';
 
 

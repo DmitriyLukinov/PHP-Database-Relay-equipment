@@ -28,6 +28,38 @@ export const relaysSlice = createSlice({
             state.dropDown3 = [];
             state.itemToChange = [];
         },
+
+        setInputField: (state, action)=>{
+            if(state.tableCellParams.length===0 || 
+                (state.tableCellParams.at(-1).row===action.payload.row && state.tableCellParams.at(-1).table===action.payload.tableID)){
+                if(state.tableCellParams.length===0){
+                    let t = document.getElementById(action.payload.tableID);
+                    let arr = [];
+                    if(action.payload.tableID==="measuringTable"){
+                        if(t.rows[action.payload.row+1]){
+                            for(let i=0; i<6; ++i){
+                                let item = t.rows[action.payload.row+1].cells[i].innerText;                                                          
+                                arr.push(item);
+                            }
+                        }
+                    }
+                    else{
+                        if(t.rows[action.payload.row+1]){
+                            for(let i=0; i<5; ++i){
+                                let item = t.rows[action.payload.row+1].cells[i].innerText;                                                          
+                                arr.push(item);
+                            }
+                        }
+                    }
+                    state.itemToChange = [...arr];
+                }
+                state.tableCellParams.push({
+                    row: action.payload.row,
+                    column: action.payload.column, 
+                    table: action.payload.tableID,
+                });
+            }
+        },
         addNew: (state, action)=>{
             switch(action.payload.currentTarget.id){
                 case 'add_currentTable':
@@ -40,13 +72,6 @@ export const relaysSlice = createSlice({
                     state.measuringInstruments.push({});
                 break;
                 case 'add_transTable':
-                    for(let i=0; i<5; ++i){
-                        state.tableCellParams.push({
-                            row: state.currentTransformers.length,
-                            column: i, 
-                            table: 'transTable',
-                        });
-                    }
                     state.currentTransformers.push({});
                 break;
             }
@@ -54,20 +79,20 @@ export const relaysSlice = createSlice({
     },
     extraReducers: (builder)=>{
         builder
-        .addCase(getItemNames.fulfilled, (state,action)=>{
-            if(state.tableCellParams.length===0 || (state.tableCellParams.at(-1).row===action.payload.row && state.tableCellParams.at(-1).table===action.payload.tableID)){
+        .addCase(getItemNames1.fulfilled, (state, action)=>{
+            if(state.tableCellParams.length===0 || (state.tableCellParams.at(-1).row===action.payload.data.row && state.tableCellParams.at(-1).table===action.payload.data.tableID)){
                 if(state.tableCellParams.length===0){
-                    let t = document.getElementById(action.payload.tableID);
+                    let t = document.getElementById(action.payload.data.tableID);
                     let arr = [];
-                    if(action.payload.tableID==="measuringTable"){
+                    if(action.payload.data.tableID==="measuringTable"){
                         for(let i=0; i<6; ++i){
-                            let item = t.rows[action.payload.row+1].cells[i].innerText;
+                            let item = t.rows[action.payload.data.row+1].cells[i].innerText;
                             arr.push(item);
                         }
                     }
                     else{
                         for(let i=0; i<5; ++i){
-                            let item = t.rows[action.payload.row+1].cells[i].innerText;
+                            let item = t.rows[action.payload.data.row+1].cells[i].innerText;
                             arr.push(item);
                         }
                     }
@@ -75,28 +100,28 @@ export const relaysSlice = createSlice({
                 }
                 let arr = [...state.tableCellParams];
                 arr.push({
-                    row: action.payload.row,
-                    column: action.payload.column, 
-                    table: action.payload.tableID
+                    row: action.payload.data.row,
+                    column: action.payload.data.column, 
+                    table: action.payload.data.tableID
                 });
                 state.tableCellParams = [...arr];
 
-                switch(action.payload.tableID){
+                switch(action.payload.data.tableID){
                     case 'currentTable':
-                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];                                           
-                        if(action.payload.column===2) state.dropDown3 = [...action.payload.items];
+                        if(action.payload.data.column===0) state.dropDown1 = [...action.payload.items];                                           
+                        if(action.payload.data.column===2) state.dropDown3 = [...action.payload.items];
                     break;                        
                     case 'voltageTable':
-                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];
+                        if(action.payload.data.column===0) state.dropDown1 = [...action.payload.items];
                     break;
                     case 'measuringTable':
-                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];                                           
-                        if(action.payload.column===1) state.dropDown2 = [...action.payload.items];                        
-                        if(action.payload.column===2 ) state.dropDown3 = [...action.payload.items];
+                        if(action.payload.data.column===0) state.dropDown1 = [...action.payload.items];                                           
+                        if(action.payload.data.column===1) state.dropDown2 = [...action.payload.items];                        
+                        if(action.payload.data.column===2 ) state.dropDown3 = [...action.payload.items];
                     break;
                     case 'transTable':
-                        if(action.payload.column===0) state.dropDown1 = [...action.payload.items];
-                        if((action.payload.column===1 || action.payload.column===2)){
+                        if(action.payload.data.column===0) state.dropDown1 = [...action.payload.items];
+                        if((action.payload.data.column===1 || action.payload.data.column===2)){
                             state.dropDown2 = [...action.payload.items];
                             state.dropDown3 = [...action.payload.items];
                         }
@@ -104,25 +129,21 @@ export const relaysSlice = createSlice({
                 }
             }
         })
-        .addCase(applyChanges.fulfilled, ()=>{
-            console.log('yes');
-        })
-
     }
 })
 
-export const getItemNames = createAsyncThunk('relays/getItemNames', async (e)=>{
-    let targetCell = e.currentTarget;
-    let row = targetCell.parentElement.sectionRowIndex;
-    let column =  targetCell.cellIndex;
-    let tableID = targetCell.closest('[id]').id;
-    const response = await fetch(`/show/item/names?column=${column}&tableID=${tableID}`,{method:'GET'});
+export const getItemNames1 = createAsyncThunk('relays/getItemNames1', async (data)=>{
+    const response = await fetch(`/show/item/names?column=${data.column}&tableID=${data.tableID}`,{method:'GET'});
     const items = await response.json();
-    return {items, row, column, tableID };
+    return {items, data };
 })
 
-export const applyChanges = createAsyncThunk('relays/applyChanges', async ()=>{
-    console.log('ppp');
+export const postNewItem = createAsyncThunk('relays/postNewItem', async()=>{
+    // const response = await fetch('/postNewItem', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify{}
+    // })
 })
 
 export const enableReducting = (cellArray, row, column, table)=>{
@@ -144,6 +165,7 @@ export const selectdropDown3 = (state)=>state.relays.dropDown3
 
 export const selectItemToChange = (state)=>state.relays.itemToChange
 
-export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort, addNew
+export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort, addNew, 
+    setInputField
 } = relaysSlice.actions
 export default relaysSlice.reducer

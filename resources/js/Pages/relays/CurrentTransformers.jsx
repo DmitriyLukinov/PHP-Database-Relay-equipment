@@ -3,8 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getCurrentTrans, enableReducting, getItemNames, addNew, selectCurrentTrans, selecttableCellParams
-} from '../../features/relaysSlice';
+import {getCurrentTrans, enableReducting, getItemNames1, addNew, selectCurrentTrans, selecttableCellParams,
+setInputField} from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
 import DropDown3 from '../components/DropDown3';
@@ -14,6 +14,15 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
     const transes = useSelector(selectCurrentTrans);
     const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
+
+    const setSelectField = (e, column)=>{
+        let data = {
+            row: e.currentTarget.parentElement.sectionRowIndex,
+            column: column,
+            tableID: "transTable",
+        }
+        dispatch(getItemNames1(data));
+    }
     useEffect(()=>{
         dispatch(getCurrentTrans({currentTransformers}));
     }, [])
@@ -21,7 +30,19 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
     return(
         <>
             <Row className ='tableLabel'>
-                <Button onClick={(e)=>dispatch(addNew(e))}
+                <Button onClick={(e)=>{
+                    dispatch(addNew(e));
+                    for(let i =0; i<3; i++){
+                        let data = {
+                            row: transes.length,
+                            column: i,
+                            tableID: "transTable",
+                        }
+                        dispatch(getItemNames1(data));
+                    }
+                    dispatch(setInputField({row:transes.length, column: 3, tableID: 'transTable'}));
+                    dispatch(setInputField({row:transes.length, column: 4, tableID: 'transTable'}));
+                }}
                     className="addNew" type="button"
                     variant="primary" size="sm" id="add_transTable"
                 >
@@ -48,31 +69,33 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
                 <tbody>
                     { transes.map((trans, index)=>{
                         return <tr key={index}>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{setSelectField(e,0)}}>
                                 {   
                                     enableReducting(tableCellParams, index, 0, "transTable")
                                     ? <DropDown1 setFieldValue={setFieldValue}/> : trans.type                                 
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{setSelectField(e,1)}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "transTable")
                                     ? <DropDown2 setFieldValue={setFieldValue}/> :trans.coil_05
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{setSelectField(e,2)}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "transTable")
                                     ? <DropDown3 setFieldValue={setFieldValue}/> :trans.coil_10P
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{dispatch(setInputField({
+                                row:e.currentTarget.parentElement.sectionRowIndex, column: 3, tableID: 'transTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "transTable")
                                     ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> :trans.year
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{dispatch(setInputField({
+                                row:e.currentTarget.parentElement.sectionRowIndex, column: 4, tableID: 'transTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "transTable")
                                     ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> :trans.quantity

@@ -3,8 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getCurrentRelays, enableReducting, getItemNames, selectCurrentRelays, selecttableCellParams
-} from '../../features/relaysSlice';
+import {getCurrentRelays, enableReducting, getItemNames1, addNew, selectCurrentRelays, selecttableCellParams,
+setInputField} from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDown3 from '../components/DropDown3';
 import DropDownACDC from '../components/DropDownACDC';
@@ -14,6 +14,14 @@ export default function CurrentRelays({currentRelays, setFieldValue}){
     const relays = useSelector(selectCurrentRelays);
     const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
+    const setSelectField = (e, column)=>{
+        let data = {
+            row: e.currentTarget.parentElement.sectionRowIndex,
+            column: column,
+            tableID: "currentTable",
+        }
+        dispatch(getItemNames1(data));
+    }
     useEffect(()=>{
         dispatch(getCurrentRelays({currentRelays}));
     }, [])
@@ -21,8 +29,22 @@ export default function CurrentRelays({currentRelays, setFieldValue}){
     return (
         <>
             <Row id ='currentLabel'>
-                <Button className="addNew" variant="primary" size="sm"
-                id="add_currentTable" style={{ marginTop: '100px' }}>Add new</Button>
+                <Button className="addNew" variant="primary" size="sm" id="add_currentTable" style={{ marginTop: '100px' }}
+                onClick={(e)=>{
+                    dispatch(addNew(e));
+                    for(let i =0; i<3; i++){
+                        let data = {
+                            row: relays.length,
+                            column: i,
+                            tableID: "currentTable",
+                        }
+                        dispatch(getItemNames1(data));
+                    }
+                    dispatch(setInputField({row:relays.length, column: 3, tableID: 'currentTable'}));
+                    dispatch(setInputField({row:relays.length, column: 4, tableID: 'currentTable'}));
+                }}>
+                    Add new
+                </Button>
                 <h5>Current Ralays</h5>
             </Row>
             <Table striped bordered hover size="sm" id="currentTable" className='equipmentTable'>
@@ -49,31 +71,33 @@ export default function CurrentRelays({currentRelays, setFieldValue}){
                 <tbody>
                     { relays.map((relay, index)=>{
                         return <tr key={index}>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{setSelectField(e,0)}}>
                                 {
                                     enableReducting(tableCellParams, index, 0, "currentTable") 
                                     ? <DropDown1 setFieldValue={setFieldValue}/> : relay.relay_type
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{setSelectField(e,1)}}>
                                 {
                                     enableReducting(tableCellParams, index, 1, "currentTable") 
                                     ? <DropDownACDC setFieldValue={setFieldValue}/> : relay.ac_dc
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{setSelectField(e,2)}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "currentTable") 
                                     ? <DropDown3 setFieldValue={setFieldValue}/> : relay.relay_current
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{dispatch(setInputField({
+                                row:e.currentTarget.parentElement.sectionRowIndex, column: 3, tableID: 'currentTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "currentTable") 
                                     ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> : relay.year
                                 }
                             </td>
-                            <td onClick={(e)=>{dispatch(getItemNames(e))}}>
+                            <td onClick={(e)=>{dispatch(setInputField({
+                                row:e.currentTarget.parentElement.sectionRowIndex, column: 4, tableID: 'currentTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "currentTable") 
                                     ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> : relay.quantity

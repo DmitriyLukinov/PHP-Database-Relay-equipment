@@ -13,7 +13,7 @@ class CurrentTransformers extends Model
     public $timestamps = false;
 
     static public function getDistinctItems($column){
-        if($column==='0'){          
+        if($column==='0'){        
             $items = self::select('type')->distinct()->get()->toArray();
             $arr = array_map(fn($item)=>$item['type'], $items); 
             return $arr;
