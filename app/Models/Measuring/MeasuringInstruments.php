@@ -4,6 +4,7 @@ namespace App\Models\Measuring;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class MeasuringInstruments extends Model
 {
@@ -31,5 +32,16 @@ class MeasuringInstruments extends Model
                 return $arr;
             break;
         }
+    }
+    static public function findItemID($newItem){
+        $item = self::where('device', $newItem[0])->where('device_type', $newItem[1])->where('measurement_limit', $newItem[2])
+        ->where('year', $newItem[3])->where('quantity', $newItem[4])->where('next_verification', $newItem[5])->get();
+        $length = count($item);
+        return ($length===0 ? false : $item->value('id'));
+    }
+    static public function insertNewItem($newItem){
+        $id = self::insertGetId(['device' => $newItem[0], 'device_type' => $newItem[1], 'measurement_limit' => $newItem[2],
+        'year' => $newItem[3],'quantity' => $newItem[4], 'next_verification'=>$newItem[5]]);
+        return $id;
     }
 }

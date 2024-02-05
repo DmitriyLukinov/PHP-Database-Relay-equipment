@@ -84,7 +84,7 @@ export default function CurrentTransformers({currentTransformers, setFieldValue}
                             <td onClick={(e)=>{setSelectField(e,2)}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "transTable")
-                                    ? <DropDown3 setFieldValue={setFieldValue}/> :trans.coil_10P
+                                    ? <DropDown3 setFieldValue={setFieldValue}/> :trans.coil_10p
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(setInputField({

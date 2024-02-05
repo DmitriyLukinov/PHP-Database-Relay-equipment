@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 export const relaysSlice = createSlice({
     name: 'relays',
@@ -129,6 +130,26 @@ export const relaysSlice = createSlice({
                 }
             }
         })
+        .addCase(postNewItem.fulfilled, (state, action)=>{
+            switch(action.payload.tableID){
+                case 'currentTable':
+                    state.currentRelays = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+                case 'voltageTable':
+                    state.voltageRelays = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+                case 'measuringTable':
+                    state.measuringInstruments = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+                case 'transTable':
+                    state.currentTransformers = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+            }
+        })
     }
 })
 
@@ -138,12 +159,14 @@ export const getItemNames1 = createAsyncThunk('relays/getItemNames1', async (dat
     return {items, data };
 })
 
-export const postNewItem = createAsyncThunk('relays/postNewItem', async()=>{
-    // const response = await fetch('/postNewItem', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify{}
-    // })
+export const postNewItem = createAsyncThunk('relays/postNewItem', async({substation, newItem, tableID})=>{
+    const response = await fetch('/postNewItem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
+        body: JSON.stringify({substation, newItem, tableID}),
+    })
+    let res = await response.json();
+    return ({res, tableID});
 })
 
 export const enableReducting = (cellArray, row, column, table)=>{

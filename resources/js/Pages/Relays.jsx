@@ -7,7 +7,7 @@ import VoltageRelays from './relays/VoltageRelays';
 import MeasuringInstruments from './relays/MeasuringInstruments';
 import CurrentTransformers from './relays/CurrentTransformers';
 import { useSelector, useDispatch } from 'react-redux';
-import {abort, selectItemToChange, selecttableCellParams, selectdropDown1
+import {abort, postNewItem, selectItemToChange, selecttableCellParams, 
 } from '../features/relaysSlice';
 
 
@@ -26,8 +26,7 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
             onSubmit={(values)=>{
                 let newItem = [...oldItem];
                 values.newRelayParam.map((item, index)=>{if(item!=='') newItem[index]=item});
-                console.log(oldItem);
-                console.log(newItem);
+                dispatch(postNewItem({substation, newItem, tableID: tableCellParams.at(-1).table}));
             }}>
             {
                 ({ setFieldValue, setValues }) =>(

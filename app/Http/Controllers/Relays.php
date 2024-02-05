@@ -9,6 +9,7 @@ use App\Models\Transformers\CurrentTransformers;
 use App\Models\Measuring\MeasuringInstruments;
 use App\Models\Voltage\VoltageRelays;
 use App\Models\Current\CurrentRelays;
+use App\Models\Substation;
 
 class Relays extends Controller
 {
@@ -30,5 +31,88 @@ class Relays extends Controller
             break;
         }
         return [$items];
+    }
+
+    private function setNewTie($tableID, $subs_and_fider, $itemID){
+        switch($tableID){
+            case "currentTable":
+                $subs_and_fider->getCurr()->attach($itemID);
+                $currentRelays = $subs_and_fider->getCurr()
+                ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])->toArray();
+                $currentRelays = array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);
+                return $currentRelays;
+            break;
+            case 'voltageTable':
+                $subs_and_fider->getVolt()->attach($itemID);
+                $voltageRelays = $subs_and_fider->getVolt()
+                ->get(['relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity'])->toArray();
+                $voltageRelays = array_map(function($arr){array_pop($arr); return $arr;}, $voltageRelays);
+                return $voltageRelays;
+            break;
+            case 'measuringTable':
+                $subs_and_fider->getMeas()->attach($itemID);
+                $measInstruments = $subs_and_fider->getMeas()
+                ->get(['device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification'])->toArray();
+                $measInstruments = array_map(function($arr){array_pop($arr); return $arr;}, $measInstruments);
+                return $measInstruments;
+            break;
+            case 'transTable':
+                $subs_and_fider->getTrans()->attach($itemID);
+                $transes = $subs_and_fider->getTrans()
+                ->get(['type', 'coil_05', 'coil_10p', 'year', 'quantity'])->toArray();
+                $transes = array_map(function($arr){array_pop($arr); return $arr;}, $transes);
+                return $transes;
+            break;
+        }
+    }
+
+    public function postNewItem(Request $req){
+        $tableID =  $req->input('tableID');
+        $substation = $req->input('substation');
+        $newItem = $req->input('newItem');
+
+        $subs_and_fider = Substation::getSubstationId($substation[0], $substation[1]);
+        switch($tableID){
+            case "currentTable":
+                $itemID = CurrentRelays::findItemID($newItem);
+                if($itemID!==false){
+                    return $this->setNewTie($tableID, $subs_and_fider, $itemID);
+                }
+                else if($itemID===false){
+                    $newItemID = CurrentRelays::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }
+            break;
+            case "voltageTable":
+                $itemID = VoltageRelays::findItemID($newItem);
+                if($itemID!==false){
+                    return $this->setNewTie($tableID, $subs_and_fider, $itemID);
+                }
+                else{
+                    $newItemID = VoltageRelays::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }
+            break;
+            case "measuringTable":
+                $itemID = MeasuringInstruments::findItemID($newItem);
+                if($itemID!==false){
+                    return $this->setNewTie($tableID, $subs_and_fider, $itemID);
+                }
+                else{
+                    $newItemID = MeasuringInstruments::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }
+            break;
+            case "transTable":
+                $itemID = CurrentTransformers::findItemID($newItem);
+                if($itemID!==false){
+                    return $this->setNewTie($tableID, $subs_and_fider, $itemID);
+                }
+                else{
+                    $newItemID = CurrentTransformers::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }
+            break;
+        }
     }
 }
