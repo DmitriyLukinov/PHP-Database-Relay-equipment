@@ -9,7 +9,7 @@ import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
 import DropDown3 from '../components/DropDown3';
 
-export default function CurrentTransformers({currentTransformers, setFieldValue}){
+export default function CurrentTransformers({currentTransformers, setFieldValue, substation}){
 
     const transes = useSelector(selectCurrentTrans);
     const tableCellParams = useSelector(selecttableCellParams);

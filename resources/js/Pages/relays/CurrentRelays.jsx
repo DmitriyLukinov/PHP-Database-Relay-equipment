@@ -9,7 +9,7 @@ import DropDown1 from '../components/DropDown1';
 import DropDown3 from '../components/DropDown3';
 import DropDownACDC from '../components/DropDownACDC';
 
-export default function CurrentRelays({currentRelays, setFieldValue}){
+export default function CurrentRelays({currentRelays, setFieldValue, substation}){
 
     const relays = useSelector(selectCurrentRelays);
     const tableCellParams = useSelector(selecttableCellParams);

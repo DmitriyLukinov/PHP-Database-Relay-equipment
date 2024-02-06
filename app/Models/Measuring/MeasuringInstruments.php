@@ -3,6 +3,8 @@
 namespace App\Models\Measuring;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Substation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -43,5 +45,16 @@ class MeasuringInstruments extends Model
         $id = self::insertGetId(['device' => $newItem[0], 'device_type' => $newItem[1], 'measurement_limit' => $newItem[2],
         'year' => $newItem[3],'quantity' => $newItem[4], 'next_verification'=>$newItem[5]]);
         return $id;
+    }
+    static public function findTies($itemToDelete){
+        $item = self::where('device', $itemToDelete[0])->where('device_type', $itemToDelete[1])->where('measurement_limit', $itemToDelete[2])
+        ->where('year', $itemToDelete[3])->where('quantity', $itemToDelete[4])->where('next_verification', $itemToDelete[5])
+        ->get();
+        $ties = $item[0]->belongsToMany(Substation::class, 'substation_measuring_instruments', 'measuring_instrument_id', 'fider_id')
+        ->get()->isEmpty();
+        return $ties;
+    }
+    static public function deleteItem($itemID){
+        self::where('id', $itemID)->delete();
     }
 }

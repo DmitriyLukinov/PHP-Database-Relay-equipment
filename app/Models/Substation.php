@@ -37,31 +37,15 @@ class Substation extends Model
     }
 
     static public function getSubstationId($substation, $fider){
-        $id = self::select('id')->where('substation',$substation)->where('fider',$fider)->get()->pluck('id');
-        $subs_and_fider = self::find($id[0]);
-        return $subs_and_fider;
+        $subs_and_fider = self::select('id')->where('substation',$substation)->where('fider',$fider)->get();
+        return $subs_and_fider[0];
     }
 
     public function getRelays(){
-        $currentRelays = $this->getCurr()
-            ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])
-            ->toArray();
-        $currentRelays = array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);
-        
-        $voltageRelays = $this->getVolt()
-           ->get(['relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity'])
-           ->toArray();
-        $voltageRelays = array_map(function($arr){array_pop($arr); return $arr;}, $voltageRelays);
-
-        $measuringInstruments = $this->getMeas()
-           ->get(['device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification'])
-           ->toArray();
-        $measuringInstruments = array_map(function($arr){array_pop($arr); return $arr;}, $measuringInstruments);
-
-        $currentTransformers = $this->getTrans()
-            ->get(['type', 'coil_05', 'coil_10p', 'year', 'quantity'])
-            ->toArray();
-        $currentTransformers = array_map(function($arr){array_pop($arr); return $arr;}, $currentTransformers);
+        $currentRelays = $this->getCurrArray();
+        $voltageRelays = $this->getVoltArray();
+        $measuringInstruments = $this->getMeasArray();
+        $currentTransformers = $this->getTransArray();
         
         return [$currentRelays, $voltageRelays, $measuringInstruments, $currentTransformers];
     }
@@ -69,13 +53,37 @@ class Substation extends Model
     public function getCurr(): BelongsToMany{
         return $this->belongsToMany(CurrentRelays::class, 'substation_current_relay', 'fider_id', 'current_relay_id');
     }
+    public function getCurrArray(){
+        $currentRelays = $this->getCurr()
+            ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])
+            ->toArray();
+        return array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);
+    }
     public function getVolt(): BelongsToMany{
         return $this->belongsToMany(VoltageRelays::class, 'substation_voltage_relay', 'fider_id', 'voltage_relay_id');
+    }
+    public function getVoltArray(){
+        $voltageRelays = $this->getVolt()
+           ->get(['relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity'])
+           ->toArray();
+        return array_map(function($arr){array_pop($arr); return $arr;}, $voltageRelays);
     }
     public function getMeas(): BelongsToMany{
         return $this->belongsToMany(MeasuringInstruments::class, 'substation_measuring_instruments', 'fider_id', 'measuring_instrument_id');
     }
+    public function getMeasArray(){
+        $measuringInstruments = $this->getMeas()
+           ->get(['device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification'])
+           ->toArray();
+        return array_map(function($arr){array_pop($arr); return $arr;}, $measuringInstruments);
+    }
     public function getTrans(): BelongsToMany{
         return $this->belongsToMany(CurrentTransformers::class, 'substation_current_transformers', 'fider_id', 'current_transformer_id');
+    }
+    public function getTransArray(){
+        $currentTransformers = $this->getTrans()
+            ->get(['type', 'coil_05', 'coil_10p', 'year', 'quantity'])
+            ->toArray();
+        return array_map(function($arr){array_pop($arr); return $arr;}, $currentTransformers);
     }
 }

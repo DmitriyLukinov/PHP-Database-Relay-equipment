@@ -76,7 +76,7 @@ export const relaysSlice = createSlice({
                     state.currentTransformers.push({});
                 break;
             }
-        }
+        },
     },
     extraReducers: (builder)=>{
         builder
@@ -150,6 +150,26 @@ export const relaysSlice = createSlice({
                 break;
             }
         })
+        .addCase(deleteItem.fulfilled, (state, action)=>{
+            switch(action.payload.tableID){
+                case 'currentTable':
+                    state.currentRelays = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+                case 'voltageTable':
+                    state.voltageRelays = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+                case 'measuringTable':
+                    state.measuringInstruments = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+                case 'transTable':
+                    state.currentTransformers = [...action.payload.res];
+                    relaysSlice.caseReducers.abort(state);
+                break;
+            }
+        })
     }
 })
 
@@ -167,6 +187,30 @@ export const postNewItem = createAsyncThunk('relays/postNewItem', async({substat
     })
     let res = await response.json();
     return ({res, tableID});
+})
+
+function getItemFromTable(t, row, column, itemToDelete){
+    if(t.rows[row+1]){
+        for(let i=0; i<column; ++i){
+            let item = t.rows[row+1].cells[i].innerText;                                                          
+            itemToDelete.push(item);
+        }
+    }
+}
+export const deleteItem = createAsyncThunk('relays/deleteItem', async ({e, substation, tableID})=>{
+    let t = document.getElementById(tableID);
+    let itemToDelete = [];
+    let row = e.currentTarget.closest('tr').sectionRowIndex;
+    if(tableID==="measuringTable"){ getItemFromTable(t, row, 6, itemToDelete); }
+    else{ getItemFromTable(t, row, 5, itemToDelete); }
+
+    const response = await fetch('/deleteItem',{
+        method: "DELETE",
+        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
+        body: JSON.stringify({substation, itemToDelete, tableID}),
+    })
+    const res = await response.json();
+    return({res, tableID});
 })
 
 export const enableReducting = (cellArray, row, column, table)=>{

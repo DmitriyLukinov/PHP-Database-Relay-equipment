@@ -8,7 +8,7 @@ setInputField} from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDownACDC from '../components/DropDownACDC';
 
-export default function CurrentRelays({voltageRelays, setFieldValue}){
+export default function CurrentRelays({voltageRelays, setFieldValue, substation}){
 
     const relays = useSelector(selectVoltageRelays);
     const tableCellParams = useSelector(selecttableCellParams);

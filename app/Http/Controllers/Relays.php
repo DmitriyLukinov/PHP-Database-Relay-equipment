@@ -37,30 +37,22 @@ class Relays extends Controller
         switch($tableID){
             case "currentTable":
                 $subs_and_fider->getCurr()->attach($itemID);
-                $currentRelays = $subs_and_fider->getCurr()
-                ->get(['relay_type', 'ac_dc', 'relay_current', 'year', 'quantity'])->toArray();
-                $currentRelays = array_map(function($arr){array_pop($arr); return $arr;}, $currentRelays);
+                $currentRelays = $subs_and_fider->getCurrArray();
                 return $currentRelays;
             break;
             case 'voltageTable':
                 $subs_and_fider->getVolt()->attach($itemID);
-                $voltageRelays = $subs_and_fider->getVolt()
-                ->get(['relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity'])->toArray();
-                $voltageRelays = array_map(function($arr){array_pop($arr); return $arr;}, $voltageRelays);
+                $voltageRelays = $subs_and_fider->getVoltArray();
                 return $voltageRelays;
             break;
             case 'measuringTable':
                 $subs_and_fider->getMeas()->attach($itemID);
-                $measInstruments = $subs_and_fider->getMeas()
-                ->get(['device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification'])->toArray();
-                $measInstruments = array_map(function($arr){array_pop($arr); return $arr;}, $measInstruments);
+                $measInstruments = $subs_and_fider->getMeasArray();
                 return $measInstruments;
             break;
             case 'transTable':
                 $subs_and_fider->getTrans()->attach($itemID);
-                $transes = $subs_and_fider->getTrans()
-                ->get(['type', 'coil_05', 'coil_10p', 'year', 'quantity'])->toArray();
-                $transes = array_map(function($arr){array_pop($arr); return $arr;}, $transes);
+                $transes = $subs_and_fider->getTransArray();
                 return $transes;
             break;
         }
@@ -112,6 +104,30 @@ class Relays extends Controller
                     $newItemID = CurrentTransformers::insertNewItem($newItem);
                     return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
                 }
+            break;
+        }
+    }
+
+    public function deleteItem(Request $req){
+        $substation = $req->input('substation');
+        $tableID = $req->input('tableID');
+        $itemToDelete = $req->input('itemToDelete');
+
+        $subs_and_fider = Substation::getSubstationId($substation[0], $substation[1]);
+        switch($tableID){
+            case "currentTable":
+            break;
+            case "voltageTable":
+            break;
+            case "measuringTable":
+                $itemID = MeasuringInstruments::findItemID($itemToDelete);
+                $subs_and_fider->getMeas()->detach($itemID);
+                $isEmpty = MeasuringInstruments::findTies($itemToDelete);
+                if($isEmpty){ MeasuringInstruments::deleteItem($itemID); }
+                $measInstruments = $subs_and_fider->getMeasArray();
+                return $measInstruments;
+            break;
+            case "transTable":
             break;
         }
     }

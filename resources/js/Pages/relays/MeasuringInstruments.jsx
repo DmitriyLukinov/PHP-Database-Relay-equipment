@@ -3,13 +3,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getMeasuringInstruments, enableReducting, getItemNames1, addNew, selectMeasuringInstruments, selecttableCellParams,
-setInputField} from '../../features/relaysSlice';
+import {getMeasuringInstruments, enableReducting, getItemNames1, deleteItem, addNew, selectMeasuringInstruments, 
+    selecttableCellParams, setInputField} from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
 import DropDown3 from '../components/DropDown3';
 
-export default function MeasuringInstruments({measuringInstruments, setFieldValue}){
+export default function MeasuringInstruments({measuringInstruments, setFieldValue, substation}){
 
     const instruments = useSelector(selectMeasuringInstruments);
     const tableCellParams = useSelector(selecttableCellParams);
@@ -108,7 +108,13 @@ export default function MeasuringInstruments({measuringInstruments, setFieldValu
                                     ? <Field name="newRelayParam[5]" size="sm" type="text" autoFocus/> : item.next_verification
                                 }
                             </td>
-                            <td><Button variant="danger" size="sm">Delete</Button></td>
+                            <td>
+                                <Button onClick={(e)=>{
+                                    dispatch(deleteItem({e:e, substation:substation, tableID: 'measuringTable'}))
+                                }} variant="danger" size="sm">
+                                    Delete
+                                </Button>
+                            </td>
                         </tr>
                     })}
                 </tbody>

@@ -51,10 +51,10 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                             </Navbar>
                         </Card>
 
-                        <CurrentRelays currentRelays={currentRelays} setFieldValue={setFieldValue}/>
-                        <VoltageRelays voltageRelays={voltageRelays} setFieldValue={setFieldValue}/>
-                        <MeasuringInstruments measuringInstruments={measuringInstruments} setFieldValue={setFieldValue}/>
-                        <CurrentTransformers currentTransformers={currentTransformers} setFieldValue={setFieldValue}/>
+                        <CurrentRelays currentRelays={currentRelays} setFieldValue={setFieldValue} substation={substation}/>
+                        <VoltageRelays voltageRelays={voltageRelays} setFieldValue={setFieldValue} substation={substation}/>
+                        <MeasuringInstruments measuringInstruments={measuringInstruments} setFieldValue={setFieldValue} substation={substation}/>
+                        <CurrentTransformers currentTransformers={currentTransformers} setFieldValue={setFieldValue} substation={substation}/>
                     </Form>
                 )
             }
