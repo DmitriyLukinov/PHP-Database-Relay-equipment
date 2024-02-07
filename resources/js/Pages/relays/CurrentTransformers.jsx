@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getCurrentTrans, enableReducting, getItemNames1, addNew, selectCurrentTrans, selecttableCellParams,
+import {getCurrentTrans, enableReducting, getItemNames1, deleteItem, addNew, selectCurrentTrans, selecttableCellParams,
 setInputField} from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDown2 from '../components/DropDown2';
@@ -101,8 +101,12 @@ export default function CurrentTransformers({currentTransformers, setFieldValue,
                                     ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> :trans.quantity
                                 }
                             </td>
-                            <td><Button variant="danger" size="sm">
-                                Delete</Button>
+                            <td>
+                                <Button onClick={(e)=>{
+                                    dispatch(deleteItem({e:e, substation:substation, tableID: 'transTable'}))
+                                }} variant="danger" size="sm">
+                                    Delete
+                                </Button>
                             </td>
                         </tr>
                     })}

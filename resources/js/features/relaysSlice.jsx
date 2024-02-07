@@ -1,6 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+const handleSuccess = (state, action) => {
+    switch (action.payload.tableID) {
+        case 'currentTable':
+            state.currentRelays = [...action.payload.res];
+        break;
+        case 'voltageTable':
+            state.voltageRelays = [...action.payload.res];
+        break;
+        case 'measuringTable':
+            state.measuringInstruments = [...action.payload.res];
+        break;
+        case 'transTable':
+            state.currentTransformers = [...action.payload.res];
+        break;
+    }
+    relaysSlice.caseReducers.abort(state);
+};
 export const relaysSlice = createSlice({
     name: 'relays',
     initialState: {
@@ -15,6 +32,7 @@ export const relaysSlice = createSlice({
         dropDown3: [],
 
         itemToChange: [],
+        addNewPressed: false,
     },
     reducers:{
         getCurrentRelays: (state, action)=>{state.currentRelays = [...action.payload.currentRelays];},
@@ -76,6 +94,7 @@ export const relaysSlice = createSlice({
                     state.currentTransformers.push({});
                 break;
             }
+            state.addNewPressed = true;
         },
     },
     extraReducers: (builder)=>{
@@ -131,44 +150,10 @@ export const relaysSlice = createSlice({
             }
         })
         .addCase(postNewItem.fulfilled, (state, action)=>{
-            switch(action.payload.tableID){
-                case 'currentTable':
-                    state.currentRelays = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-                case 'voltageTable':
-                    state.voltageRelays = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-                case 'measuringTable':
-                    state.measuringInstruments = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-                case 'transTable':
-                    state.currentTransformers = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-            }
+            handleSuccess(state, action);
         })
         .addCase(deleteItem.fulfilled, (state, action)=>{
-            switch(action.payload.tableID){
-                case 'currentTable':
-                    state.currentRelays = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-                case 'voltageTable':
-                    state.voltageRelays = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-                case 'measuringTable':
-                    state.measuringInstruments = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-                case 'transTable':
-                    state.currentTransformers = [...action.payload.res];
-                    relaysSlice.caseReducers.abort(state);
-                break;
-            }
+            handleSuccess(state, action);
         })
     }
 })
@@ -231,6 +216,7 @@ export const selectdropDown2 = (state)=>state.relays.dropDown2
 export const selectdropDown3 = (state)=>state.relays.dropDown3
 
 export const selectItemToChange = (state)=>state.relays.itemToChange
+export const selectAddNewPressed = (state)=>state.relays.addNewPressed
 
 export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort, addNew, 
     setInputField

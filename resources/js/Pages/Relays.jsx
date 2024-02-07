@@ -7,13 +7,14 @@ import VoltageRelays from './relays/VoltageRelays';
 import MeasuringInstruments from './relays/MeasuringInstruments';
 import CurrentTransformers from './relays/CurrentTransformers';
 import { useSelector, useDispatch } from 'react-redux';
-import {abort, postNewItem, selectItemToChange, selecttableCellParams, 
+import {abort, postNewItem, selectItemToChange, selecttableCellParams, selectAddNewPressed
 } from '../features/relaysSlice';
 
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
     let oldItem = useSelector(selectItemToChange);
+    const AddNewPressed = useSelector(selectAddNewPressed);
     const tableCellParams = useSelector(selecttableCellParams);
     const dispatch = useDispatch();
 

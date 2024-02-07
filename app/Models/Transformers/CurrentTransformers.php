@@ -3,6 +3,8 @@
 namespace App\Models\Transformers;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Substation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -39,5 +41,15 @@ class CurrentTransformers extends Model
         $id = self::insertGetId(['type' => $newItem[0], 'coil_05' => $newItem[1], 'coil_10p' => $newItem[2],
         'year' => $newItem[3],'quantity' => $newItem[4]]);
         return $id;
+    }
+    static public function findTies($itemToDelete){
+        $item = self::where('type', $itemToDelete[0])->where('coil_05', $itemToDelete[1])->where('coil_10p', $itemToDelete[2])
+        ->where('year', $itemToDelete[3])->where('quantity', $itemToDelete[4])->get();
+        $ties = $item[0]->belongsToMany(Substation::class, 'substation_current_transformers', 'current_transformer_id', 'fider_id')
+        ->get()->isEmpty();
+        return $ties;
+    }
+    static public function deleteItem($itemID){
+        self::where('id', $itemID)->delete();
     }
 }

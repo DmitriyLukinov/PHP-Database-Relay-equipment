@@ -116,18 +116,32 @@ class Relays extends Controller
         $subs_and_fider = Substation::getSubstationId($substation[0], $substation[1]);
         switch($tableID){
             case "currentTable":
+                $itemID = CurrentRelays::findItemID($itemToDelete);
+                $subs_and_fider->getCurr()->detach($itemID);
+                $isEmpty = CurrentRelays::findTies($itemToDelete);
+                if($isEmpty){ CurrentRelays::deleteItem($itemID); }
+                return $subs_and_fider->getCurrArray();
             break;
             case "voltageTable":
+                $itemID = VoltageRelays::findItemID($itemToDelete);
+                $subs_and_fider->getVolt()->detach($itemID);
+                $isEmpty = VoltageRelays::findTies($itemToDelete);
+                if($isEmpty){ VoltageRelays::deleteItem($itemID); }
+                return $subs_and_fider->getVoltArray();
             break;
             case "measuringTable":
                 $itemID = MeasuringInstruments::findItemID($itemToDelete);
                 $subs_and_fider->getMeas()->detach($itemID);
                 $isEmpty = MeasuringInstruments::findTies($itemToDelete);
                 if($isEmpty){ MeasuringInstruments::deleteItem($itemID); }
-                $measInstruments = $subs_and_fider->getMeasArray();
-                return $measInstruments;
+                return $subs_and_fider->getMeasArray();
             break;
             case "transTable":
+                $itemID = CurrentTransformers::findItemID($itemToDelete);
+                $subs_and_fider->getTrans()->detach($itemID);
+                $isEmpty = CurrentTransformers::findTies($itemToDelete);
+                if($isEmpty){ CurrentTransformers::deleteItem($itemID); }
+                return $subs_and_fider->getTransArray();
             break;
         }
     }

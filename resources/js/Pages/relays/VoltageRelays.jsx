@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Row, Button, Table } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import {getVoltageRelays, enableReducting, getItemNames1, addNew, selectVoltageRelays, selecttableCellParams,
+import {getVoltageRelays, enableReducting, getItemNames1, deleteItem, addNew, selectVoltageRelays, selecttableCellParams,
 setInputField} from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDownACDC from '../components/DropDownACDC';
@@ -104,7 +104,11 @@ export default function CurrentRelays({voltageRelays, setFieldValue, substation}
                                 }
                             </td>
                             <td>
-                                <Button variant="danger" size="sm">Delete</Button>
+                                <Button onClick={(e)=>{
+                                    dispatch(deleteItem({e:e, substation:substation, tableID: 'voltageTable'}))
+                                }} variant="danger" size="sm">
+                                    Delete
+                                </Button>
                             </td>
                         </tr>
                     })}
