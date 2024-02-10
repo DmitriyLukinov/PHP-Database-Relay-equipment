@@ -30,6 +30,10 @@ export const relaysSlice = createSlice({
         dropDown1: [],
         dropDown2: [],
         dropDown3: [],
+        newSelectValue1: '',
+        newSelectValue2: '',
+        newSelectValue3: '',
+        itemModal: false,
 
         itemToChange: [],
         addNewPressed: false,
@@ -45,7 +49,12 @@ export const relaysSlice = createSlice({
             state.dropDown1 = [];
             state.dropDown2 = [];
             state.dropDown3 = [];
+            state.newSelectValue1 = '',
+            state.newSelectValue2 = '',
+            state.newSelectValue3 = '',
+
             state.itemToChange = [];
+            state.addNewPressed = false;
         },
 
         setInputField: (state, action)=>{
@@ -96,6 +105,28 @@ export const relaysSlice = createSlice({
             }
             state.addNewPressed = true;
         },
+
+        showItemModal:(state)=>{state.itemModal = true},
+        hideItemModal:(state)=>{
+            state.itemModal = false;
+        },
+
+        insertItem:(state, action)=>{
+            switch(state.tableCellParams.at(-1).column){
+                case 0:
+                    state.dropDown1[0].unshift(action.payload);
+                    state.newSelectValue1 = action.payload;
+                break;
+                case 1:
+                    state.dropDown2[0].unshift(action.payload);
+                    state.newSelectValue2 = action.payload;
+                break;
+                case 2:
+                    state.dropDown3[0].unshift(action.payload);
+                    state.newSelectValue3 = action.payload;
+                break;
+            }
+        }
     },
     extraReducers: (builder)=>{
         builder
@@ -155,6 +186,9 @@ export const relaysSlice = createSlice({
         .addCase(deleteItem.fulfilled, (state, action)=>{
             handleSuccess(state, action);
         })
+        .addCase(updateItem.fulfilled, (state, action)=>{
+            handleSuccess(state, action);
+        })
     }
 })
 
@@ -169,6 +203,15 @@ export const postNewItem = createAsyncThunk('relays/postNewItem', async({substat
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
         body: JSON.stringify({substation, newItem, tableID}),
+    })
+    let res = await response.json();
+    return ({res, tableID});
+})
+export const updateItem = createAsyncThunk('relays/updateItem', async({substation, newItem, oldItem, tableID})=>{
+    const response = await fetch('/updateItem', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
+        body: JSON.stringify({substation, newItem, oldItem, tableID}),
     })
     let res = await response.json();
     return ({res, tableID});
@@ -214,11 +257,15 @@ export const selecttableCellParams = (state)=>state.relays.tableCellParams
 export const selectdropDown1 = (state)=>state.relays.dropDown1
 export const selectdropDown2 = (state)=>state.relays.dropDown2
 export const selectdropDown3 = (state)=>state.relays.dropDown3
+export const selectNewSelectValue1 = (state)=>state.relays.newSelectValue1
+export const selectNewSelectValue2 = (state)=>state.relays.newSelectValue2
+export const selectNewSelectValue3 = (state)=>state.relays.newSelectValue3
+export const itemModal = (state)=>state.relays.itemModal
 
 export const selectItemToChange = (state)=>state.relays.itemToChange
 export const selectAddNewPressed = (state)=>state.relays.addNewPressed
 
 export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort, addNew, 
-    setInputField
+    setInputField, showItemModal, hideItemModal, insertItem,
 } = relaysSlice.actions
 export default relaysSlice.reducer

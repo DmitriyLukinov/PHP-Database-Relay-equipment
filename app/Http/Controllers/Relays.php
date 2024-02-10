@@ -107,6 +107,68 @@ class Relays extends Controller
             break;
         }
     }
+    public function updateItem(Request $req){
+        $tableID =  $req->input('tableID');
+        $substation = $req->input('substation');
+        $newItem = $req->input('newItem');
+        $oldItem = $req->input('oldItem');
+        
+        $subs_and_fider = Substation::getSubstationId($substation[0], $substation[1]);
+        switch($tableID){
+            case "currentTable":
+                $oldItemID = CurrentRelays::findItemID($oldItem);
+                $subs_and_fider->getCurr()->detach($oldItemID);
+                $isEmpty = CurrentRelays::findTies($oldItem);
+                if($isEmpty){ CurrentRelays::deleteItem($oldItemID); }
+
+                $itemID = CurrentRelays::findItemID($newItem);
+                if($itemID!==false){ return $this->setNewTie($tableID, $subs_and_fider, $itemID); }
+                else {
+                    $newItemID = CurrentRelays::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }
+            break;
+            case "voltageTable": 
+                $oldItemID = VoltageRelays::findItemID($oldItem);
+                $subs_and_fider->getVolt()->detach($oldItemID);
+                $isEmpty = VoltageRelays::findTies($oldItem);
+                if($isEmpty) VoltageRelays::deleteItem($oldItemID); 
+
+                $itemID = VoltageRelays::findItemID($newItem);
+                if($itemID!==false) return $this->setNewTie($tableID, $subs_and_fider, $itemID); 
+                else {
+                    $newItemID = VoltageRelays::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }              
+            break;
+            case "measuringTable":
+                $oldItemID = MeasuringInstruments::findItemID($oldItem);
+                $subs_and_fider->getMeas()->detach($oldItemID);
+                $isEmpty = MeasuringInstruments::findTies($oldItem);
+                if($isEmpty) MeasuringInstruments::deleteItem($oldItemID); 
+
+                $itemID = MeasuringInstruments::findItemID($newItem);
+                if($itemID!==false) return $this->setNewTie($tableID, $subs_and_fider, $itemID); 
+                else {
+                    $newItemID = MeasuringInstruments::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                } 
+            break;
+            case "transTable":
+                $oldItemID = CurrentTransformers::findItemID($oldItem);
+                $subs_and_fider->getTrans()->detach($oldItemID);
+                $isEmpty = CurrentTransformers::findTies($oldItem);
+                if($isEmpty) CurrentTransformers::deleteItem($oldItemID); 
+
+                $itemID = CurrentTransformers::findItemID($newItem);
+                if($itemID!==false) return $this->setNewTie($tableID, $subs_and_fider, $itemID); 
+                else {
+                    $newItemID = CurrentTransformers::insertNewItem($newItem);
+                    return $this->setNewTie($tableID, $subs_and_fider, $newItemID);
+                }  
+            break;
+        }
+    }
 
     public function deleteItem(Request $req){
         $substation = $req->input('substation');

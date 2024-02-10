@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import { Formik, Form, Field } from "formik";
+import React from 'react';
+import { Formik, Form, } from "formik";
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
 import { Button, Card, Navbar, Col } from 'react-bootstrap';
 import CurrentRelays from './relays/CurrentRelays';
@@ -7,8 +7,9 @@ import VoltageRelays from './relays/VoltageRelays';
 import MeasuringInstruments from './relays/MeasuringInstruments';
 import CurrentTransformers from './relays/CurrentTransformers';
 import { useSelector, useDispatch } from 'react-redux';
-import {abort, postNewItem, selectItemToChange, selecttableCellParams, selectAddNewPressed
+import {abort, postNewItem, updateItem, selectItemToChange, selecttableCellParams, selectAddNewPressed
 } from '../features/relaysSlice';
+import ItemModal from './components/ItemModal';
 
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
@@ -21,13 +22,14 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
     return(
         <>
         <Formik 
-            initialValues={{
-                newRelayParam:['','','','','',''],
-            }}
+            initialValues={{newRelayParam:['','','','','',''],}}
             onSubmit={(values)=>{
                 let newItem = [...oldItem];
                 values.newRelayParam.map((item, index)=>{if(item!=='') newItem[index]=item});
-                dispatch(postNewItem({substation, newItem, tableID: tableCellParams.at(-1).table}));
+
+                AddNewPressed
+                ? dispatch(postNewItem({substation, newItem, tableID: tableCellParams.at(-1).table}))
+                : dispatch(updateItem({substation, newItem, oldItem, tableID: tableCellParams.at(-1).table}))
             }}>
             {
                 ({ setFieldValue, setValues }) =>(
@@ -56,6 +58,7 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                         <VoltageRelays voltageRelays={voltageRelays} setFieldValue={setFieldValue} substation={substation}/>
                         <MeasuringInstruments measuringInstruments={measuringInstruments} setFieldValue={setFieldValue} substation={substation}/>
                         <CurrentTransformers currentTransformers={currentTransformers} setFieldValue={setFieldValue} substation={substation}/>
+                        <ItemModal />
                     </Form>
                 )
             }

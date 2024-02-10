@@ -98,7 +98,7 @@ export const applyChanges = createAsyncThunk(
     async function fetchingData(newItem, items){
         if(newItem!==''){
             for(let item of items){
-                if(newItem===item){alert('Such item esists!'); throw new Error();}
+                if(newItem===item){alert('Such item exists!'); throw new Error();}
             }
             const response = await fetch("/changeObjectSF", {
                 method: "PUT",

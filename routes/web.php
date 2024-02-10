@@ -17,3 +17,4 @@ Route::get('/return/to/substations', [Message::class, 'backToSubstations']);
 Route::get('show/item/names', [Relays::class, 'showDistinctItems']);
 Route::post('postNewItem', [Relays::class, 'postNewItem']);
 Route::delete('deleteItem', [Relays::class, 'deleteItem']);
+Route::put('updateItem', [Relays::class, 'updateItem']);
