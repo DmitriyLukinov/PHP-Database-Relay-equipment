@@ -21,9 +21,11 @@ export default function ItemModal(){
                 <Modal.Footer>
                     <Button variant="primary" 
                         onClick={()=>{
-                            const elem = document.getElementById('modalItemField');
-                            dispatch(insertItem(elem.value));
-                            dispatch(hideItemModal());
+                            const input = document.getElementById('modalItemField');
+                            if(input.value!==''){
+                                dispatch(insertItem(input.value));
+                                dispatch(hideItemModal());
+                            }
                         }}>
                         Ok
                     </Button>

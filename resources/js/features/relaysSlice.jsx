@@ -37,6 +37,10 @@ export const relaysSlice = createSlice({
 
         itemToChange: [],
         addNewPressed: false,
+
+        popUp: false,
+        errorMessageText: '',
+        columnID: '',
     },
     reducers:{
         getCurrentRelays: (state, action)=>{state.currentRelays = [...action.payload.currentRelays];},
@@ -107,8 +111,19 @@ export const relaysSlice = createSlice({
         },
 
         showItemModal:(state)=>{state.itemModal = true},
-        hideItemModal:(state)=>{
-            state.itemModal = false;
+        hideItemModal:(state)=>{state.itemModal = false},
+
+        showPopUp:(state, action)=>{
+            if(action.payload){
+                state.popUp = true;
+                state.errorMessageText = action.payload.message;
+                state.columnID = action.payload.column;
+            }
+        },
+        hidePopUp:(state)=>{
+            state.popUp = false;
+            state.errorMessageText = '';
+            state.columnID = '';
         },
 
         insertItem:(state, action)=>{
@@ -265,7 +280,11 @@ export const itemModal = (state)=>state.relays.itemModal
 export const selectItemToChange = (state)=>state.relays.itemToChange
 export const selectAddNewPressed = (state)=>state.relays.addNewPressed
 
+export const selectPopUp = (state)=>state.relays.popUp
+export const selectErrorMessageText = (state)=>state.relays.errorMessageText
+export const selectColumnID = (state)=>state.relays.columnID
+
 export const { getCurrentRelays, getVoltageRelays, getMeasuringInstruments, getCurrentTrans, abort, addNew, 
-    setInputField, showItemModal, hideItemModal, insertItem,
+    setInputField, showItemModal, hideItemModal, showPopUp, hidePopUp, insertItem,
 } = relaysSlice.actions
 export default relaysSlice.reducer

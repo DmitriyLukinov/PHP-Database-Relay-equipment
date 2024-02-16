@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
-import { Row, Button, Table } from 'react-bootstrap';
+import { Row, Button, Table, } from 'react-bootstrap';
 import { Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import {getCurrentRelays, enableReducting, getItemNames1, deleteItem, addNew, selectCurrentRelays, selecttableCellParams,
-setInputField} from '../../features/relaysSlice';
+setInputField, } from '../../features/relaysSlice';
 import DropDown1 from '../components/DropDown1';
 import DropDown3 from '../components/DropDown3';
 import DropDownACDC from '../components/DropDownACDC';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function CurrentRelays({currentRelays, setFieldValue, substation}){
 
@@ -93,14 +94,16 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 3, tableID: 'currentTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "currentTable") 
-                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> : relay.year
+                                    ? <Field name="newRelayParam[3]" id='column3' size="sm" type="text" autoFocus/> 
+                                    : relay.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(setInputField({
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 4, tableID: 'currentTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "currentTable") 
-                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> : relay.quantity
+                                    ? <Field name="newRelayParam[4]" id='column4' size="sm" type="text" autoFocus/> 
+                                    : relay.quantity
                                 }
                             </td>
                             <td>
@@ -114,6 +117,7 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
                     })}
                 </tbody>
             </Table>
+            <ErrorMessage />
         </>
     );
 }
