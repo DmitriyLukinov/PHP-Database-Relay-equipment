@@ -83,7 +83,7 @@ export default function CurrentRelays({voltageRelays, setFieldValue, substation}
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 2, tableID: 'voltageTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 2, "voltageTable") 
-                                    ? <Field name="newRelayParam[2]" size="sm" type="text" autoFocus/> 
+                                    ? <Field name="newRelayParam[2]" id='column2'size="sm" type="text" autoFocus/> 
                                     : relay.relay_voltage
                                 }
                             </td>
@@ -91,7 +91,7 @@ export default function CurrentRelays({voltageRelays, setFieldValue, substation}
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 3, tableID: 'voltageTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "voltageTable") 
-                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> 
+                                    ? <Field name="newRelayParam[3]" id='column3' size="sm" type="text" autoFocus/> 
                                     : relay.year
                                 }
                             </td>
@@ -99,7 +99,7 @@ export default function CurrentRelays({voltageRelays, setFieldValue, substation}
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 4, tableID: 'voltageTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "voltageTable") 
-                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> 
+                                    ? <Field name="newRelayParam[4]" id='column4' size="sm" type="text" autoFocus/> 
                                     : relay.quantity
                                 }
                             </td>

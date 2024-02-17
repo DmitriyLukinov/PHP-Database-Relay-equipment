@@ -2,12 +2,13 @@ import React from 'react';
 import { Formik, Form, Field} from "formik";
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
 import {Button, Modal} from 'react-bootstrap';
-import { itemModal, hideItemModal, insertItem, } from '../../features/relaysSlice';
+import { itemModal, hideItemModal, selecttableCellParams, insertItem} from '../../features/relaysSlice';
 import { useSelector, useDispatch, } from 'react-redux';
 
-export default function ItemModal(){
+export default function ItemModal({setFieldValue}){
     const show = useSelector(itemModal);
     const dispatch = useDispatch();
+    const tableCellParams = useSelector(selecttableCellParams);
 
     return (
         <>
@@ -24,6 +25,10 @@ export default function ItemModal(){
                             const input = document.getElementById('modalItemField');
                             if(input.value!==''){
                                 dispatch(insertItem(input.value));
+                                tableCellParams.at(-1).column===0 ? setFieldValue("newRelayParam[0]", input.value): null;
+                                tableCellParams.at(-1).column===1 ? setFieldValue("newRelayParam[1]", input.value): null;
+                                tableCellParams.at(-1).column===2 ? setFieldValue("newRelayParam[2]", input.value): null;
+                                
                                 dispatch(hideItemModal());
                             }
                         }}>

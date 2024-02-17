@@ -30,9 +30,6 @@ export const relaysSlice = createSlice({
         dropDown1: [],
         dropDown2: [],
         dropDown3: [],
-        newSelectValue1: '',
-        newSelectValue2: '',
-        newSelectValue3: '',
         itemModal: false,
 
         itemToChange: [],
@@ -130,15 +127,12 @@ export const relaysSlice = createSlice({
             switch(state.tableCellParams.at(-1).column){
                 case 0:
                     state.dropDown1[0].unshift(action.payload);
-                    state.newSelectValue1 = action.payload;
                 break;
                 case 1:
                     state.dropDown2[0].unshift(action.payload);
-                    state.newSelectValue2 = action.payload;
                 break;
                 case 2:
                     state.dropDown3[0].unshift(action.payload);
-                    state.newSelectValue3 = action.payload;
                 break;
             }
         }

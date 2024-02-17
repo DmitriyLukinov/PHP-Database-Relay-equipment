@@ -91,14 +91,14 @@ export default function CurrentTransformers({currentTransformers, setFieldValue,
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 3, tableID: 'transTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "transTable")
-                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> :trans.year
+                                    ? <Field name="newRelayParam[3]" id='column3' size="sm" type="text" autoFocus/> :trans.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(setInputField({
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 4, tableID: 'transTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "transTable")
-                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> :trans.quantity
+                                    ? <Field name="newRelayParam[4]" id='column4' size="sm" type="text" autoFocus/> :trans.quantity
                                 }
                             </td>
                             <td>
