@@ -91,21 +91,21 @@ export default function MeasuringInstruments({measuringInstruments, setFieldValu
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 3, tableID: 'measuringTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 3, "measuringTable")
-                                    ? <Field name="newRelayParam[3]" size="sm" type="text" autoFocus/> : item.year
+                                    ? <Field name="newRelayParam[3]" id='column3' size="sm" type="text" autoFocus/> : item.year
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(setInputField({
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 4, tableID: 'measuringTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 4, "measuringTable")
-                                    ? <Field name="newRelayParam[4]" size="sm" type="text" autoFocus/> : item.quantity
+                                    ? <Field name="newRelayParam[4]" id='column4' size="sm" type="text" autoFocus/> : item.quantity
                                 }
                             </td>
                             <td onClick={(e)=>{dispatch(setInputField({
                                 row:e.currentTarget.parentElement.sectionRowIndex, column: 5, tableID: 'measuringTable'}))}}>
                                 {
                                     enableReducting(tableCellParams, index, 5, "measuringTable")
-                                    ? <Field name="newRelayParam[5]" size="sm" type="text" autoFocus/> : item.next_verification
+                                    ? <Field name="newRelayParam[5]" id='column5' size="sm" type="text" autoFocus/> : item.next_verification
                                 }
                             </td>
                             <td>

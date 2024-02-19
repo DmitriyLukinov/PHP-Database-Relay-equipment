@@ -17,7 +17,6 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
     let oldItem = useSelector(selectItemToChange);
     const AddNewPressed = useSelector(selectAddNewPressed);
     const tableCellParams = useSelector(selecttableCellParams);
-    const popUp = useSelector(selectPopUp);
     const dispatch = useDispatch();
 
     function checkFormat(regexp, relayParam, err, column, errors){
@@ -68,6 +67,9 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                         break;
                         case 4: 
                             checkFormat(/^[1-9]\d{0,10}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
+                        break;
+                        case 5:
+                            checkFormat(/^(?:19|20)\d\d-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|3[01])|(?:0[13-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|30)|(?:0[13578]|1[02])-31)$/, values.newRelayParam[5], 'pup', 'column5', errors)
                         break;
                     } 
                 }
