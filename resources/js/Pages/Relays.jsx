@@ -8,7 +8,7 @@ import MeasuringInstruments from './relays/MeasuringInstruments';
 import CurrentTransformers from './relays/CurrentTransformers';
 import { useSelector, useDispatch } from 'react-redux';
 import {abort, postNewItem, updateItem, selectItemToChange, selecttableCellParams, selectAddNewPressed, showPopUp,
-    hidePopUp, selectPopUp,
+    hidePopUp, 
 } from '../features/relaysSlice';
 import ItemModal from './components/ItemModal';
 
@@ -30,71 +30,73 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
 
     const validate = (values) => {
         const errors = {};
-        switch(tableCellParams.at(-1).table){
-            case 'currentTable':
-            case 'voltageTable':
-                for(let cell of tableCellParams){
-                    switch(cell.column){
-                        case 0:
-                            checkFormat(/^[^\s].{0,5}$/, values.newRelayParam[0], 'zzz', 'column0', errors)
-                        break;
-                        case 2:
-                            checkFormat(/^(?!0\d+\.\d*$|0\d*$)\d+(\.\d+)?$/, values.newRelayParam[2], 'yyy', 'column2', errors)
-                        break;
-                        case 3:
-                            checkFormat(/^(19[0-9][0-9]|20[0-9][0-9]|21[0-4][0-9]|215[0-5])$/, values.newRelayParam[3], 'ppp', 'column3', errors);
-                        break;
-                        case 4: 
-                            checkFormat(/^[1-9]\d{0,2}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
-                        break;
+        if(tableCellParams.length>0){
+            switch(tableCellParams.at(-1).table){
+                case 'currentTable':
+                case 'voltageTable':
+                    for(let cell of tableCellParams){
+                        switch(cell.column){
+                            case 0:
+                                checkFormat(/^[^\s].{0,5}$/, values.newRelayParam[0], 'zzz', 'column0', errors)
+                            break;
+                            case 2:
+                                checkFormat(/^(?!0\d+\.\d*$|0\d*$)\d+(\.\d+)?$/, values.newRelayParam[2], 'yyy', 'column2', errors)
+                            break;
+                            case 3:
+                                checkFormat(/^(19[0-9][0-9]|20[0-9][0-9]|21[0-4][0-9]|215[0-5])$/, values.newRelayParam[3], 'ppp', 'column3', errors);
+                            break;
+                            case 4: 
+                                checkFormat(/^[1-9]\d{0,2}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
+                            break;
+                        }
                     }
-                }
-            break;
-            case 'measuringTable':
-                for(let cell of tableCellParams){
-                    switch(cell.column){
-                        case 0:
-                            checkFormat(/^[^\s].{0,29}$/, values.newRelayParam[0], 'zzz', 'column0', errors)
-                        break;
-                        case 1:
-                            checkFormat(/^[^\s].{0,19}$/, values.newRelayParam[1], 'zzz', 'column1', errors)
-                        break;
-                        case 2:
-                            checkFormat(/^\d+(\.\d+)?-\d+(\.\d+)? [A-Za-zА-Яа-я]+$/, values.newRelayParam[2], 'yyy', 'column2', errors)
-                        break;
-                        case 3:
-                            checkFormat(/^(19[0-9][0-9]|20[0-9][0-9]|21[0-4][0-9]|215[0-5])$/, values.newRelayParam[3], 'ppp', 'column3', errors);
-                        break;
-                        case 4: 
-                            checkFormat(/^[1-9]\d{0,10}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
-                        break;
-                        case 5:
-                            checkFormat(/^(?:19|20)\d\d-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|3[01])|(?:0[13-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|30)|(?:0[13578]|1[02])-31)$/, values.newRelayParam[5], 'pup', 'column5', errors)
-                        break;
-                    } 
-                }
-            break;
-            case 'transTable':
-                for(let cell of tableCellParams){
-                    switch(cell.column){
-                        case 0:
-                            checkFormat(/^[^\s].{0,5}$/, values.newRelayParam[0], 'zzz', 'column0', errors)
-                        break;
-                        case 1:
-                            checkFormat(/^[1-9]\d{0,5}\/[1-9]\d{0,5}$/, values.newRelayParam[1], 'yyy', 'column1', errors)
-                        break;
-                        case 2:
-                            checkFormat(/^[1-9]\d{0,5}\/[1-9]\d{0,5}$/, values.newRelayParam[2], 'kkk', 'column2', errors)
-                        break;
-                        case 3:
-                            checkFormat(/^(19[0-9][0-9]|20[0-9][0-9]|21[0-4][0-9]|215[0-5])$/, values.newRelayParam[3], 'ppp', 'column3', errors)
-                        break;
-                        case 4:
-                            checkFormat(/^[1-9]\d{0,10}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
-                        break;
+                break;
+                case 'measuringTable':
+                    for(let cell of tableCellParams){
+                        switch(cell.column){
+                            case 0:
+                                checkFormat(/^[^\s].{0,29}$/, values.newRelayParam[0], 'zzz', 'column0', errors)
+                            break;
+                            case 1:
+                                checkFormat(/^[^\s].{0,19}$/, values.newRelayParam[1], 'zzz', 'column1', errors)
+                            break;
+                            case 2:
+                                checkFormat(/^\d+(\.\d+)?-\d+(\.\d+)? [A-Za-zА-Яа-я]+$/, values.newRelayParam[2], 'yyy', 'column2', errors)
+                            break;
+                            case 3:
+                                checkFormat(/^(19[0-9][0-9]|20[0-9][0-9]|21[0-4][0-9]|215[0-5])$/, values.newRelayParam[3], 'ppp', 'column3', errors);
+                            break;
+                            case 4: 
+                                checkFormat(/^[1-9]\d{0,10}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
+                            break;
+                            case 5:
+                                checkFormat(/^(?:19|20)\d\d-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|3[01])|(?:0[13-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|30)|(?:0[13578]|1[02])-31)$/, values.newRelayParam[5], 'pup', 'column5', errors)
+                            break;
+                        } 
                     }
-                }
-            break;           
+                break;
+                case 'transTable':
+                    for(let cell of tableCellParams){
+                        switch(cell.column){
+                            case 0:
+                                checkFormat(/^[^\s].{0,5}$/, values.newRelayParam[0], 'zzz', 'column0', errors)
+                            break;
+                            case 1:
+                                checkFormat(/^[1-9]\d{0,5}\/[1-9]\d{0,5}$/, values.newRelayParam[1], 'yyy', 'column1', errors)
+                            break;
+                            case 2:
+                                checkFormat(/^[1-9]\d{0,5}\/[1-9]\d{0,5}$/, values.newRelayParam[2], 'kkk', 'column2', errors)
+                            break;
+                            case 3:
+                                checkFormat(/^(19[0-9][0-9]|20[0-9][0-9]|21[0-4][0-9]|215[0-5])$/, values.newRelayParam[3], 'ppp', 'column3', errors)
+                            break;
+                            case 4:
+                                checkFormat(/^[1-9]\d{0,10}$/, values.newRelayParam[4], 'ooo', 'column4', errors)
+                            break;
+                        }
+                    }
+                break;           
+            }
         }
         return errors;
     };
@@ -106,12 +108,13 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
             validate={validate}
             validateOnChange={false}
             onSubmit={(values)=>{
-                let newItem = [...oldItem];
-                console.log(values);
-                //values.newRelayParam.map((item, index)=>{if(item!=='') newItem[index]=item});
-                // AddNewPressed
-                // ? dispatch(postNewItem({substation, newItem, tableID: tableCellParams.at(-1).table}))
-                // : dispatch(updateItem({substation, newItem, oldItem, tableID: tableCellParams.at(-1).table}))
+                if(tableCellParams.length>0){
+                    let newItem = [...oldItem];
+                    values.newRelayParam.map((item, index)=>{if(item!=='') newItem[index]=item});
+                    AddNewPressed
+                    ? dispatch(postNewItem({substation, newItem, tableID: tableCellParams.at(-1).table}))
+                    : dispatch(updateItem({substation, newItem, oldItem, tableID: tableCellParams.at(-1).table}))
+                }              
             }}>
             {
                 ({ setFieldValue, setValues }) =>(

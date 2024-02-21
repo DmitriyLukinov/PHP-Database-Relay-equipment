@@ -50,12 +50,12 @@ export const relaysSlice = createSlice({
             state.dropDown1 = [];
             state.dropDown2 = [];
             state.dropDown3 = [];
-            state.newSelectValue1 = '',
-            state.newSelectValue2 = '',
-            state.newSelectValue3 = '',
 
             state.itemToChange = [];
             state.addNewPressed = false;
+
+            state.errorMessageText = '';
+            state.columnID = '';
         },
 
         setInputField: (state, action)=>{
@@ -87,6 +87,7 @@ export const relaysSlice = createSlice({
                     column: action.payload.column, 
                     table: action.payload.tableID,
                 });
+                console.log(Array.from(state.tableCellParams));
             }
         },
         addNew: (state, action)=>{
@@ -234,20 +235,23 @@ function getItemFromTable(t, row, column, itemToDelete){
         }
     }
 }
-export const deleteItem = createAsyncThunk('relays/deleteItem', async ({e, substation, tableID})=>{
-    let t = document.getElementById(tableID);
-    let itemToDelete = [];
-    let row = e.currentTarget.closest('tr').sectionRowIndex;
-    if(tableID==="measuringTable"){ getItemFromTable(t, row, 6, itemToDelete); }
-    else{ getItemFromTable(t, row, 5, itemToDelete); }
-
-    const response = await fetch('/deleteItem',{
-        method: "DELETE",
-        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
-        body: JSON.stringify({substation, itemToDelete, tableID}),
-    })
-    const res = await response.json();
-    return({res, tableID});
+export const deleteItem = createAsyncThunk('relays/deleteItem', async ({e, substation, tableID}, {getState})=>{
+    const state = getState();
+    if(state.relays.tableCellParams.length===0){
+        let t = document.getElementById(tableID);
+        let itemToDelete = [];
+        let row = e.currentTarget.closest('tr').sectionRowIndex;
+        if(tableID==="measuringTable"){ getItemFromTable(t, row, 6, itemToDelete); }
+        else{ getItemFromTable(t, row, 5, itemToDelete); }
+    
+        const response = await fetch('/deleteItem',{
+            method: "DELETE",
+            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
+            body: JSON.stringify({substation, itemToDelete, tableID}),
+        })
+        const res = await response.json();
+        return({res, tableID});
+    }  
 })
 
 export const enableReducting = (cellArray, row, column, table)=>{

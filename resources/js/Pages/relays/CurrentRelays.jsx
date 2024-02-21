@@ -32,17 +32,19 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
             <Row id ='currentLabel'>
                 <Button className="addNew" variant="primary" size="sm" id="add_currentTable" style={{ marginTop: '100px' }}
                 onClick={(e)=>{
-                    dispatch(addNew(e));
-                    for(let i =0; i<3; i++){
-                        let data = {
-                            row: relays.length,
-                            column: i,
-                            tableID: "currentTable",
+                    if(tableCellParams.length===0){
+                        dispatch(addNew(e));
+                        dispatch(setInputField({row:relays.length, column: 3, tableID: 'currentTable'}));
+                        dispatch(setInputField({row:relays.length, column: 4, tableID: 'currentTable'}));
+                        for(let i =0; i<3; i++){
+                            let data = {
+                                row: relays.length,
+                                column: i,
+                                tableID: "currentTable",
+                            }
+                            dispatch(getItemNames1(data));
                         }
-                        dispatch(getItemNames1(data));
-                    }
-                    dispatch(setInputField({row:relays.length, column: 3, tableID: 'currentTable'}));
-                    dispatch(setInputField({row:relays.length, column: 4, tableID: 'currentTable'}));
+                    }                  
                 }}>
                     Add new
                 </Button>
