@@ -1,5 +1,4 @@
 import React from 'react';
-import { Formik, Form, Field} from "formik";
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
 import {Button, Modal} from 'react-bootstrap';
 import { itemModal, hideItemModal, selecttableCellParams, insertItem} from '../../features/relaysSlice';

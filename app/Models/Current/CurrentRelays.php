@@ -51,4 +51,34 @@ class CurrentRelays extends Model
     static public function deleteItem($itemID){
         self::where('id', $itemID)->delete();
     }
+
+    // для фильтра
+    static private function getFilteredRelays($relayType, $relayRange, $year){
+        $currentRelays = self::select();
+        count($relayType)> 0 ? $currentRelays->whereIn('relay_type', $relayType) : null;
+        count($relayRange)> 0 ? $currentRelays->whereIn('relay_current', $relayRange) : null;
+        count($year)> 0 ? $currentRelays->whereIn('year', $year) : null;
+        return $currentRelays;
+    }
+    static private function getSubstFider($id, $substation, $fider){
+        $obj = $id->belongsToMany(Substation::class, 'substation_current_relay', 'current_relay_id', 'fider_id');
+        count($substation)> 0 ? $obj->whereIn('substation', $substation) : null;
+        count($fider)> 0 ? $obj->whereIn('fider', $fider) : null;
+        $ob = $obj->get(['substation', 'fider'])->toArray();
+        $ob = array_map(function($arr){array_pop($arr); return $arr;}, $ob);
+        return $ob;
+    }
+    static public function getFilteredCurr($substation, $fider, $relayType, $relayRange, $year){
+        $currentRelays = self::getFilteredRelays($relayType, $relayRange, $year);
+        $IDs = $currentRelays->select('id')->get();
+        foreach($IDs as $id){
+            $copyCurrentRelays = clone $currentRelays;
+            $obj = self::getSubstFider($id, $substation, $fider);
+            $curr = $copyCurrentRelays->select('relay_type', 'ac_dc', 'relay_current', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
+            foreach($obj as $ob){
+                $ob = array_merge($ob, $curr[0]);
+                Log::info($ob);
+            }
+        }
+    }
 }

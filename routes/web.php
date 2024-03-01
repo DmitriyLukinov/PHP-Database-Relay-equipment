@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Message;
 use App\Http\Controllers\Relays;
+use App\Http\Controllers\Filter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -18,3 +19,5 @@ Route::get('show/item/names', [Relays::class, 'showDistinctItems']);
 Route::post('postNewItem', [Relays::class, 'postNewItem']);
 Route::delete('deleteItem', [Relays::class, 'deleteItem']);
 Route::put('updateItem', [Relays::class, 'updateItem']);
+
+Route::put('filter', [Filter::class, 'sendFilteredRelays']);

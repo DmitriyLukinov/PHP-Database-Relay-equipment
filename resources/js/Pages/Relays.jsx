@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Formik, Form, } from "formik";
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
 import { Button, Card, Navbar, Col } from 'react-bootstrap';
@@ -11,6 +11,8 @@ import {abort, postNewItem, updateItem, selectItemToChange, selecttableCellParam
     hidePopUp, 
 } from '../features/relaysSlice';
 import ItemModal from './components/ItemModal';
+import Filter from './components/FilterModal';
+import { showFilter } from '../features/filterSlice';
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
@@ -132,7 +134,11 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                                     </Button>
                                     <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
                                     <div class="vertical-separator"></div>
-                                    <Button className='navButton' variant="info">Filter</Button>
+                                    <Button className='navButton' variant="info"
+                                        onClick={()=>{dispatch(showFilter())}}
+                                    >
+                                        Filter
+                                    </Button>
                                 </Col>
                                 <h4>{substation[0]}-</h4><h4>{substation[1]}</h4>
                                 <h1>Relay equipment</h1>
@@ -143,11 +149,12 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                         <VoltageRelays voltageRelays={voltageRelays} setFieldValue={setFieldValue} substation={substation}/>
                         <MeasuringInstruments measuringInstruments={measuringInstruments} setFieldValue={setFieldValue} substation={substation}/>
                         <CurrentTransformers currentTransformers={currentTransformers} setFieldValue={setFieldValue} substation={substation}/>
-                        <ItemModal setFieldValue={setFieldValue}/>
+                        <ItemModal setFieldValue={setFieldValue}/>                       
                     </Form>
                 )
             }
         </Formik>
+        <Filter />
         </>
     );
 }

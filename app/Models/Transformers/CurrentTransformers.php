@@ -52,4 +52,35 @@ class CurrentTransformers extends Model
     static public function deleteItem($itemID){
         self::where('id', $itemID)->delete();
     }
+
+    // для фильтра
+    static private function getFilteredTranses($transType, $coil_05, $coil_10p, $year){
+        $transes = self::select();
+        count($transType)> 0 ? $transes->whereIn('type', $transType) : null;
+        count($coil_05)> 0 ? $transes->whereIn('coil_05', $coil_05) : null;
+        count($coil_10p)> 0 ? $transes->whereIn('coil_10p', $coil_10p) : null;
+        count($year)> 0 ? $transes->whereIn('year', $year) : null;
+        return $transes;
+    }
+    static private function getSubstFider($id, $substation, $fider){
+        $obj = $id->belongsToMany(Substation::class, 'substation_current_transformers', 'current_transformer_id', 'fider_id');
+        count($substation)> 0 ? $obj->whereIn('substation', $substation) : null;
+        count($fider)> 0 ? $obj->whereIn('fider', $fider) : null;
+        $ob = $obj->get(['substation', 'fider'])->toArray();
+        $ob = array_map(function($arr){array_pop($arr); return $arr;}, $ob);
+        return $ob;
+    }
+    static public function getFilteredTrans($substation, $fider, $transType, $coil_05, $coil_10p, $year){
+        $currentTranses = self::getFilteredTranses($transType, $coil_05, $coil_10p, $year);
+        $IDs = $currentTranses->select('id')->get();
+        foreach($IDs as $id){
+            $copyCurrentTranses = clone $currentTranses;
+            $obj = self::getSubstFider($id, $substation, $fider);
+            $curr = $copyCurrentTranses->select('type', 'coil_05', 'coil_10p', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
+            foreach($obj as $ob){
+                $ob = array_merge($ob, $curr[0]);
+                Log::info($ob);
+            }
+        }
+    }
 }

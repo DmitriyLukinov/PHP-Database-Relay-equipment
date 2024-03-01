@@ -18,6 +18,11 @@ class Substation extends Model
     protected $table = 'substation';
     public $timestamps = false;
 
+    static public function getSubstationsFiders(){
+        $items = self::select();
+        return($items);
+    }
+
     static public function getSubstations(){
         $substations = self::select('substation')->distinct()->get();
         $arr = [];

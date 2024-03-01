@@ -40,4 +40,34 @@ class VoltageRelays extends Model
     static public function deleteItem($itemID){
         self::where('id', $itemID)->delete();
     }
+
+    // для фильтра
+    static private function getFilteredRelays($voltageRelayType, $voltageType, $year){
+        $voltageRelays = self::select();
+        count($voltageRelayType)> 0 ? $voltageRelays->whereIn('relay_type', $voltageRelayType) : null;
+        count($voltageType)> 0 ? $voltageRelays->whereIn('ac_dc', $voltageType) : null;
+        count($year)> 0 ? $voltageRelays->whereIn('year', $year) : null;
+        return $voltageRelays;
+    }
+    static private function getSubstFider($id, $substation, $fider){
+        $obj = $id->belongsToMany(Substation::class, 'substation_voltage_relay', 'voltage_relay_id', 'fider_id');
+        count($substation)> 0 ? $obj->whereIn('substation', $substation) : null;
+        count($fider)> 0 ? $obj->whereIn('fider', $fider) : null;
+        $ob = $obj->get(['substation', 'fider'])->toArray();
+        $ob = array_map(function($arr){array_pop($arr); return $arr;}, $ob);
+        return $ob;
+    }
+    static public function getFilteredVolt($substation, $fider, $voltageRelayType, $voltageType, $year){
+        $voltageRelays = self::getFilteredRelays($voltageRelayType, $voltageType, $year);
+        $IDs = $voltageRelays->select('id')->get();
+        foreach($IDs as $id){
+            $copyVoltageRelays = clone $voltageRelays;
+            $obj = self::getSubstFider($id, $substation, $fider);
+            $curr = $copyVoltageRelays->select('relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
+            foreach($obj as $ob){
+                $ob = array_merge($ob, $curr[0]);
+                Log::info($ob);
+            }
+        }
+    }
 }
