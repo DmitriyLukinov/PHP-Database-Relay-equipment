@@ -65,11 +65,13 @@ class MeasuringInstruments extends Model
         count($deviceType)> 0 ? $measInstruments->whereIn('device_type', $deviceType) : null;
         count($limit)> 0 ? $measInstruments->whereIn('measurement_limit', $limit) : null;
         count($year)> 0 ? $measInstruments->whereIn('year', $year) : null;
-        strlen($nextVerification[0])===10 ? $measInstruments->whereIn('next_verification', $nextVerification) : null;
-        strlen($nextVerification[0])===4 ? $measInstruments->whereYear('next_verification', $nextVerification[0]) : null;
-        strlen($nextVerification[0])===7 
-        ? $measInstruments->whereYear('next_verification', substr($nextVerification[0], 0, 4))->whereMonth('next_verification', substr($nextVerification[0], -2))
-        : null;
+        if(count($nextVerification)>0){
+            strlen($nextVerification[0])===10 ? $measInstruments->whereIn('next_verification', $nextVerification) : null;
+            strlen($nextVerification[0])===4 ? $measInstruments->whereYear('next_verification', $nextVerification[0]) : null;
+            strlen($nextVerification[0])===7 
+            ? $measInstruments->whereYear('next_verification', substr($nextVerification[0], 0, 4))->whereMonth('next_verification', substr($nextVerification[0], -2))
+            : null;
+        }
         return $measInstruments;
     }
     static private function getSubstFider($id, $substation, $fider){
@@ -81,6 +83,7 @@ class MeasuringInstruments extends Model
         return $ob;
     }
     static public function getFilteredMeasInsr($substation, $fider, $device, $deviceType, $limit, $nextVerification, $year){
+        $measInstrumentsArr = [];
         $measInstruments = self::getFilteredMI($device, $deviceType, $limit, $nextVerification, $year);
         $IDs = $measInstruments->select('id')->get();
         foreach($IDs as $id){
@@ -89,8 +92,9 @@ class MeasuringInstruments extends Model
             $curr = $copyMeasInstruments->select('device', 'device_type', 'measurement_limit', 'year', 'quantity', 'next_verification')->where('id', $id->id)->get()->toArray();                  
             foreach($obj as $ob){
                 $ob = array_merge($ob, $curr[0]);
-                Log::info($ob);
+                array_push($measInstrumentsArr, $ob);
             }
         }
+        return $measInstrumentsArr;
     }
 }

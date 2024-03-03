@@ -6,6 +6,7 @@ use App\Http\Controllers\Relays;
 use App\Http\Controllers\Filter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 Route::delete('/del/smth', [Message::class, 'deleteObjectSF']);
 Route::put('/changeObjectSF', [Message::class, 'changeObjectSF']);
@@ -20,4 +21,10 @@ Route::post('postNewItem', [Relays::class, 'postNewItem']);
 Route::delete('deleteItem', [Relays::class, 'deleteItem']);
 Route::put('updateItem', [Relays::class, 'updateItem']);
 
-Route::put('filter', [Filter::class, 'sendFilteredRelays']);
+Route::get('/get/filtered/data', [Filter::class, 'sendFilteredRelays']);
+
+// Route::get('/get/filtered/data', function(Request $req){
+//     $values = $req->all();
+//     Log::info($values);
+//     return Inertia::render('FilteredRelays');
+// });

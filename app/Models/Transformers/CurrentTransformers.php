@@ -71,6 +71,7 @@ class CurrentTransformers extends Model
         return $ob;
     }
     static public function getFilteredTrans($substation, $fider, $transType, $coil_05, $coil_10p, $year){
+        $transArr = [];
         $currentTranses = self::getFilteredTranses($transType, $coil_05, $coil_10p, $year);
         $IDs = $currentTranses->select('id')->get();
         foreach($IDs as $id){
@@ -79,8 +80,9 @@ class CurrentTransformers extends Model
             $curr = $copyCurrentTranses->select('type', 'coil_05', 'coil_10p', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
             foreach($obj as $ob){
                 $ob = array_merge($ob, $curr[0]);
-                Log::info($ob);
+                array_push($transArr, $ob);
             }
         }
+        return $transArr;
     }
 }

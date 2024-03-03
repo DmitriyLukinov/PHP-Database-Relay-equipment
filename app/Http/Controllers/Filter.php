@@ -10,6 +10,7 @@ use App\Models\Voltage\VoltageRelays;
 use App\Models\Measuring\MeasuringInstruments;
 use App\Models\Transformers\CurrentTransformers;
 use App\Models\Substation;
+use Inertia\Inertia;
 
 class Filter extends Controller
 {
@@ -19,16 +20,12 @@ class Filter extends Controller
     }
 
     public function sendFilteredRelays(Request $req){
-        $input = $req->input('values');
+        $input = $req->all();
 
-        $keysToSplit = [
-            'substation', 'fider', 'year', 'relayType', 'relayRange', 'voltageRelayType', 'voltageType', 
-            'device', 'deviceType', 'limit', 'nextVerification', 'transType', 'coil_05', 'coil_10p'           
-        ];
+        $keysToSplit = ['substation', 'fider', 'year', 'relayType', 'relayRange', 'voltageRelayType', 'voltageType', 
+        'device', 'deviceType', 'limit', 'nextVerification', 'transType', 'coil_05', 'coil_10p'];
     
-        foreach ($keysToSplit as $key) {
-            $input[$key] = $this->splitStringIntoWords($input[$key]);
-        }
+        foreach ($keysToSplit as $key) {$input[$key] = $this->splitStringIntoWords($input[$key]);}
         
         $SFs = Substation::getSubstationsFiders();
         if (count($input['relayType']) === 0 && count($input['relayRange']) === 0 && count($input['voltageRelayType']) === 0 &&
@@ -59,17 +56,18 @@ class Filter extends Controller
         }
         else{ 
             if(count($input['relayType'])> 0 || count($input['relayRange']) > 0){
-                CurrentRelays::getFilteredCurr($input['substation'], $input['fider'], $input['relayType'], $input['relayRange'], $input['year']);
+                $currentRelays = CurrentRelays::getFilteredCurr($input['substation'], $input['fider'], $input['relayType'], $input['relayRange'], $input['year']);
             }
             if(count($input['voltageRelayType'])> 0 || count($input['voltageType'])> 0){
-                VoltageRelays::getFilteredVolt($input['substation'], $input['fider'], $input['voltageRelayType'], $input['voltageType'], $input['year']);
-            }
-            if(count($input['transType']) > 0 || count($input['coil_05']) > 0 || count($input['coil_10p']) > 0){
-                CurrentTransformers::getFilteredTrans($input['substation'], $input['fider'], $input['transType'], $input['coil_05'], $input['coil_10p'], $input['year']);
+                $voltageRelays = VoltageRelays::getFilteredVolt($input['substation'], $input['fider'], $input['voltageRelayType'], $input['voltageType'], $input['year']);
             }
             if(count($input['device']) >0 || count($input['deviceType']) > 0 || count($input['limit']) > 0 || count($input['nextVerification'])> 0){
-                MeasuringInstruments::getFilteredMeasInsr($input['substation'], $input['fider'], $input['device'], $input['deviceType'], $input['limit'], $input['nextVerification'], $input['year']);
+                $measInstruments = MeasuringInstruments::getFilteredMeasInsr($input['substation'], $input['fider'], $input['device'], $input['deviceType'], $input['limit'], $input['nextVerification'], $input['year']);
             }
+            if(count($input['transType']) > 0 || count($input['coil_05']) > 0 || count($input['coil_10p']) > 0){
+                $transes = CurrentTransformers::getFilteredTrans($input['substation'], $input['fider'], $input['transType'], $input['coil_05'], $input['coil_10p'], $input['year']);
+            }
+            return Inertia::render('FilteredRelays', ['currentRelays'=>$currentRelays]);
         }
     }
 }

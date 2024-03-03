@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+import { router } from '@inertiajs/react'
 
 export const filterSlice = createSlice({
     name: 'filter',
@@ -14,11 +14,7 @@ export const filterSlice = createSlice({
 
 export const selectFilterModal = (state)=>state.filter.filterModal
 export const getFilterRelays = createAsyncThunk('filter/getFilterRelays', async(values)=>{
-    const response = await fetch('/filter',{
-        method:'PUT',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
-        body: JSON.stringify({values}),
-    });
+    router.get('/get/filtered/data', values);
 })
 
 export const {showFilter, hideFilter} = filterSlice.actions

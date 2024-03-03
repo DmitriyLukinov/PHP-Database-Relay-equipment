@@ -58,6 +58,7 @@ class VoltageRelays extends Model
         return $ob;
     }
     static public function getFilteredVolt($substation, $fider, $voltageRelayType, $voltageType, $year){
+        $voltArr = [];
         $voltageRelays = self::getFilteredRelays($voltageRelayType, $voltageType, $year);
         $IDs = $voltageRelays->select('id')->get();
         foreach($IDs as $id){
@@ -66,8 +67,9 @@ class VoltageRelays extends Model
             $curr = $copyVoltageRelays->select('relay_type', 'ac_dc', 'relay_voltage', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
             foreach($obj as $ob){
                 $ob = array_merge($ob, $curr[0]);
-                Log::info($ob);
+                array_push($voltArr, $ob);
             }
         }
+        return $voltArr;
     }
 }

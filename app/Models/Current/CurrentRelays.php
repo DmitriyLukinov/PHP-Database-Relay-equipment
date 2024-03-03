@@ -69,6 +69,7 @@ class CurrentRelays extends Model
         return $ob;
     }
     static public function getFilteredCurr($substation, $fider, $relayType, $relayRange, $year){
+        $currArr = [];
         $currentRelays = self::getFilteredRelays($relayType, $relayRange, $year);
         $IDs = $currentRelays->select('id')->get();
         foreach($IDs as $id){
@@ -77,8 +78,9 @@ class CurrentRelays extends Model
             $curr = $copyCurrentRelays->select('relay_type', 'ac_dc', 'relay_current', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
             foreach($obj as $ob){
                 $ob = array_merge($ob, $curr[0]);
-                Log::info($ob);
+                array_push($currArr, $ob);
             }
         }
+        return $currArr;
     }
 }
