@@ -21,10 +21,4 @@ Route::post('postNewItem', [Relays::class, 'postNewItem']);
 Route::delete('deleteItem', [Relays::class, 'deleteItem']);
 Route::put('updateItem', [Relays::class, 'updateItem']);
 
-Route::get('/get/filtered/data', [Filter::class, 'sendFilteredRelays']);
-
-// Route::get('/get/filtered/data', function(Request $req){
-//     $values = $req->all();
-//     Log::info($values);
-//     return Inertia::render('FilteredRelays');
-// });
+Route::get('/{par1}/{par2}/get/filtered/data', [Filter::class, 'sendFilteredRelays']);

@@ -2,12 +2,15 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
 import { Button, Card, Navbar, Col, Row } from 'react-bootstrap';
 import CurrentRelays from './filteredRelays/currentRelays';
+import VoltageRelays from './filteredRelays/voltageRelays';
+import MeasuringInstruments from './filteredRelays/MeasuringInstruments';
+import CurrentTransformers from './filteredRelays/CurrentTransformers';
 
-const FilteredRelays = ({currentRelays})=>{
+const FilteredRelays = ({currentRelays, voltageRelays, measInstruments, currentTranses})=>{
 
     return(
         <>
-        <Card className="card">
+        {/* <Card className="card">
             <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
                 <Row className='headerCol'>
                     <Button className='navButton' variant="secondary" >Back</Button>
@@ -19,8 +22,11 @@ const FilteredRelays = ({currentRelays})=>{
                 </Row>
                 <h1>Relay equipment</h1>
             </Navbar>
-        </Card>
-        <CurrentRelays currentRelays={currentRelays} />
+        </Card> */}
+        {currentRelays.length > 0 ? <CurrentRelays currentRelays={currentRelays} /> :null}
+        {voltageRelays.length > 0 ? <VoltageRelays voltageRelays={voltageRelays} /> : null}
+        {measInstruments.length > 0 ? <MeasuringInstruments measInstruments={measInstruments} /> : null}
+        {currentTranses.length > 0 ? <CurrentTransformers currentTranses={currentTranses} /> : null}
         </>
     )
 }
