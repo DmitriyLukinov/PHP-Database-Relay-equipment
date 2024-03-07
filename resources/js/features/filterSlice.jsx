@@ -14,9 +14,11 @@ export const filterSlice = createSlice({
 
 export const selectFilterModal = (state)=>state.filter.filterModal
 export const getFilterRelays = createAsyncThunk('filter/getFilterRelays', async(values)=>{
-    const currentPath = window.location.pathname;
+    let currentPath = window.location.pathname;
+    currentPath = currentPath.replace(/\/$/, '');
+    currentPath = currentPath.replace(/\/get\/filtered\/data.*/, '');
     const newPath = `${currentPath}/get/filtered/data`;
-    router.get(newPath, values, {preserveState: true});
+    router.get(newPath, values);
 })
 
 export const {showFilter, hideFilter} = filterSlice.actions

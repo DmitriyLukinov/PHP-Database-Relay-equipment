@@ -22,3 +22,5 @@ Route::delete('deleteItem', [Relays::class, 'deleteItem']);
 Route::put('updateItem', [Relays::class, 'updateItem']);
 
 Route::get('/{par1}/{par2}/get/filtered/data', [Filter::class, 'sendFilteredRelays']);
+Route::get('/{par1}/get/filtered/data', [Filter::class, 'sendFilteredRelays']);
+Route::get('/get/filtered/data', [Filter::class, 'sendFilteredRelays']);

@@ -6,6 +6,9 @@ import { Formik, Field, Form } from 'formik';
 import { getSubstations, getFiders, addNew, enableReducting, getRelays, applyChanges, abort, back,
   setRedactingField, deleteObjectSF, selectSubctation, selectName, selectRow, selectItemToChange
 } from '../features/subst_fiderSlice';
+import Filter from './components/FilterModal';
+import { showFilter } from '../features/filterSlice';
+import ErrorMessage from './components/ErrorMessage';
 
 const Test = ({txt}) => {
  
@@ -67,7 +70,10 @@ const Test = ({txt}) => {
                 <Button className='navButton' variant="secondary" onClick={()=>dispatch(abort())}>Abort</Button>
                 <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
                 <div class="vertical-separator"></div>
-                <Button className='navButton' variant="info">Filter</Button>
+                <Button className='navButton' variant="info" 
+                  onClick={()=>{dispatch(showFilter())}}>
+                  Filter
+                </Button>
               </Col>
               <h1>Relay equipment</h1>
             </Navbar>
@@ -106,8 +112,10 @@ const Test = ({txt}) => {
               })}
             </tbody>
           </Table>
+          <ErrorMessage />
         </Form>        
       </Formik>
+      <Filter />
     </>
   );
 };
