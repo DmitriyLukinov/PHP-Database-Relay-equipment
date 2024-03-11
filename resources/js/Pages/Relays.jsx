@@ -13,6 +13,7 @@ import {abort, postNewItem, updateItem, selectItemToChange, selecttableCellParam
 import ItemModal from './components/ItemModal';
 import Filter from './components/FilterModal';
 import { showFilter } from '../features/filterSlice';
+import { getFiders } from '../features/subst_fiderSlice';
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
@@ -124,7 +125,13 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                         <Card className="card">
                             <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
                                 <Col className='headerCol'>
-                                    <Button className='navButton' variant="secondary" >Back</Button>
+                                    <Button className='navButton' variant="secondary" onClick={()=>{
+                                        let path = window.location.pathname;
+                                        let parts = path.split('/').filter(Boolean);
+                                        console.log(decodeURIComponent(parts[0]));
+                                    }}>
+                                        Back
+                                    </Button>
                                     <Button className='navButton' variant="secondary" type="button"
                                         onClick={()=>{
                                             dispatch(abort());

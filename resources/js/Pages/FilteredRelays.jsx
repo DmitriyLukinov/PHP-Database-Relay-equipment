@@ -7,7 +7,7 @@ import VoltageRelays from './filteredRelays/voltageRelays';
 import MeasuringInstruments from './filteredRelays/MeasuringInstruments';
 import CurrentTransformers from './filteredRelays/CurrentTransformers';
 import Filter from './components/FilterModal';
-import { showFilter } from '../features/filterSlice';
+import { showFilter, back } from '../features/filterSlice';
 import ErrorMessage from './components/ErrorMessage';
 
 const FilteredRelays = ({currentRelays, voltageRelays, measInstruments, currentTranses})=>{
@@ -19,7 +19,9 @@ const FilteredRelays = ({currentRelays, voltageRelays, measInstruments, currentT
         <Card className="card">
             <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
                 <Row className='headerCol'>
-                    <Button className='navButton' variant="secondary" >Back</Button>
+                    <Button className='navButton' variant="secondary" onClick={()=>dispatch(back())}>
+                        Back
+                    </Button>
                     <div class="vertical-separator"></div>
                     <Button className='navButton' variant="info" onClick={()=>{dispatch(showFilter())}}>
                         Filter

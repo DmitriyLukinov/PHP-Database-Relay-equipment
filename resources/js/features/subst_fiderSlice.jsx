@@ -80,7 +80,7 @@ export const substationSlice = createSlice({
 export const getFiders = createAsyncThunk('substation/getFiders', async (substation) => {
     const response = await fetch(`/${substation}`, {
         method: "GET",
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Custom-Header': 'customHeader'}
     });
     const data = await response.json();
     window.history.pushState({}, '', data.url);
@@ -153,7 +153,6 @@ export const deleteObjectSF = createAsyncThunk( 'substation/deleteObjectSF', asy
 
 export const back = createAsyncThunk('substation/back', async (substation)=>{
     if(substation!=='Substation'){
-        console.log('yes');
         const response = await fetch('/return/to/substations',{
             method: "GET"
         })
