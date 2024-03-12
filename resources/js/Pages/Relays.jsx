@@ -13,7 +13,7 @@ import {abort, postNewItem, updateItem, selectItemToChange, selecttableCellParam
 import ItemModal from './components/ItemModal';
 import Filter from './components/FilterModal';
 import { showFilter } from '../features/filterSlice';
-import { getFiders } from '../features/subst_fiderSlice';
+import { getFidersBack } from '../features/subst_fiderSlice';
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
@@ -128,7 +128,8 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                                     <Button className='navButton' variant="secondary" onClick={()=>{
                                         let path = window.location.pathname;
                                         let parts = path.split('/').filter(Boolean);
-                                        console.log(decodeURIComponent(parts[0]));
+                                        dispatch(abort());
+                                        dispatch(getFidersBack(decodeURIComponent(parts[0])));
                                     }}>
                                         Back
                                     </Button>
@@ -142,7 +143,9 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                                     <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
                                     <div class="vertical-separator"></div>
                                     <Button className='navButton' variant="info"
-                                        onClick={()=>{dispatch(showFilter())}}
+                                        onClick={()=>{
+                                            tableCellParams.length===0 ? dispatch(showFilter()) : null;
+                                        }}
                                     >
                                         Filter
                                     </Button>

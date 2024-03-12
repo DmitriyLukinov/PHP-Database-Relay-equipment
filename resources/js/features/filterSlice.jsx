@@ -25,8 +25,7 @@ export const back = createAsyncThunk('filter/getRelays', async ()=>{
     let currentPath = window.location.pathname;
     currentPath = currentPath.replace(/\/$/, '');
     currentPath = currentPath.replace(/\/get\/filtered\/data.*/, '');
-    const newPath = `${currentPath}`;
-    router.get(newPath);
+    currentPath.length===0 ? router.get('/') : router.get(`${currentPath}`);
 })
 
 export const {showFilter, hideFilter} = filterSlice.actions

@@ -80,11 +80,15 @@ export const substationSlice = createSlice({
 export const getFiders = createAsyncThunk('substation/getFiders', async (substation) => {
     const response = await fetch(`/${substation}`, {
         method: "GET",
-        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Custom-Header': 'customHeader'}
+        headers: { 'X-Requested-With': 'XMLHttpRequest'}
     });
     const data = await response.json();
     window.history.pushState({}, '', data.url);
     return {data, substation};
+});
+
+export const getFidersBack = createAsyncThunk('substation/getF', async (substation) => {
+    router.get(`/${substation}`);
 });
 
 export const getRelays = createAsyncThunk('substation/getRelays', async ({substation, fider})=>{

@@ -71,7 +71,10 @@ const Test = ({txt}) => {
                 <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
                 <div class="vertical-separator"></div>
                 <Button className='navButton' variant="info" 
-                  onClick={()=>{dispatch(showFilter())}}>
+                  onClick={()=>{
+                    itemToChange==='' ? dispatch(showFilter()) : null;
+                  }}
+                >
                   Filter
                 </Button>
               </Col>
@@ -100,7 +103,7 @@ const Test = ({txt}) => {
                       </Button>
                     }
                     <Button className='tableButton' variant="primary" size="sm" 
-                    onClick={(e)=>{dispatch(setRedactingField(e))}}>
+                      onClick={(e)=>{dispatch(setRedactingField(e))}}>
                       Change
                     </Button>
                     <Button className='tableButton' variant="danger" size="sm"

@@ -21,13 +21,14 @@ class Message extends Controller
     public function showFiders(Request $req, $substation){
         $fiders = Substation::getFiders($substation);
 
-        $value = $req->header('Custom-Header');
-        Log::info($value);
-
         return $req->hasHeader('X-Requested-With')
         ? ['fiders' => $fiders, 'url' => "/${substation}"] 
         : Inertia::render('Test', ['txt' => $fiders]);
     }
+    // public function showFiders(Request $req, $substation){
+    //     $fiders = Substation::getFiders($substation);
+    //     return Inertia::render('Test', ['txt' => $fiders]);
+    // }
     public function changeObjectSF(Request $req){
         $input = $req->input();
         if($input['substation']!=='Substation' && $input['itemToChange']!==NULL){
