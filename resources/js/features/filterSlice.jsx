@@ -28,6 +28,23 @@ export const back = createAsyncThunk('filter/getRelays', async ()=>{
     currentPath.length===0 ? router.get('/') : router.get(`${currentPath}`);
 })
 
+export function sortYear (item, setItem){
+    let tr = [...item];
+    tr.sort(function(a, b) {return a.year - b.year;})                                                                     
+    setItem(tr);
+}
+export function sortSubstation(item, setItem){
+    let tr = [...item];
+    tr.sort(function(a, b) {
+        let substationA = a.substation.toLowerCase();
+        let substationB = b.substation.toLowerCase();
+        if (substationA < substationB) return -1;
+        if (substationA > substationB) return 1;
+        return 0;
+    });                                                                     
+    setItem(tr);
+}
+
 export const {showFilter, hideFilter} = filterSlice.actions
 
 export default filterSlice.reducer

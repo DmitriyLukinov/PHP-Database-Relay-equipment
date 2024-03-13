@@ -71,10 +71,7 @@ const Test = ({txt}) => {
                 <Button className='navButton' variant="secondary" type="submit">Apply changes</Button>
                 <div class="vertical-separator"></div>
                 <Button className='navButton' variant="info" 
-                  onClick={()=>{
-                    itemToChange==='' ? dispatch(showFilter()) : null;
-                  }}
-                >
+                  onClick={()=>{itemToChange==='' ? dispatch(showFilter()) : null;}}>
                   Filter
                 </Button>
               </Col>
