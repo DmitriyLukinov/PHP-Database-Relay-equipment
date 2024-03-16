@@ -111,6 +111,7 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
             initialValues={{newRelayParam:['','','','','','']}}
             validate={validate}
             validateOnChange={false}
+            validateOnBlur={false}
             onSubmit={(values)=>{
                 if(tableCellParams.length>0){
                     let newItem = [...oldItem];

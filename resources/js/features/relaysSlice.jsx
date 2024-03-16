@@ -193,7 +193,24 @@ export const relaysSlice = createSlice({
             handleSuccess(state, action);
         })
         .addCase(deleteItem.fulfilled, (state, action)=>{
-            handleSuccess(state, action);
+            if(action.payload.res==='justDel'){
+                switch (action.payload.tableID) {
+                    case 'currentTable':
+                        state.currentRelays.pop();
+                    break;
+                    case 'voltageTable':
+                        state.voltageRelays.pop();
+                    break;
+                    case 'measuringTable':
+                        state.measuringInstruments.pop();
+                    break;
+                    case 'transTable':
+                        state.currentTransformers.pop();
+                    break;
+                }
+                relaysSlice.caseReducers.abort(state);
+            }
+            else handleSuccess(state, action);
         })
         .addCase(updateItem.fulfilled, (state, action)=>{
             handleSuccess(state, action);
@@ -242,14 +259,19 @@ export const deleteItem = createAsyncThunk('relays/deleteItem', async ({e, subst
         let row = e.currentTarget.closest('tr').sectionRowIndex;
         if(tableID==="measuringTable"){ getItemFromTable(t, row, 6, itemToDelete); }
         else{ getItemFromTable(t, row, 5, itemToDelete); }
-    
-        const response = await fetch('/deleteItem',{
-            method: "DELETE",
-            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
-            body: JSON.stringify({substation, itemToDelete, tableID}),
-        })
-        const res = await response.json();
-        return({res, tableID});
+        
+        if (itemToDelete.every(element => element === '')) {
+            return({res:'justDel', tableID});
+        }
+        else{
+            const response = await fetch('/deleteItem',{
+                method: "DELETE",
+                headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken},
+                body: JSON.stringify({substation, itemToDelete, tableID}),
+            })
+            const res = await response.json();
+            return({res, tableID});
+        }
     }  
 })
 
