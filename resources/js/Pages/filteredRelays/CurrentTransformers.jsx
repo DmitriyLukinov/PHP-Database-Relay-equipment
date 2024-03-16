@@ -9,9 +9,7 @@ export default function CurrentTransformers({currentTranses}){
 
     return (
         <>
-            <Row className ='tableLabel'>
-                <h5>Current Transformers</h5>
-            </Row>
+            <h5 className = 'filtTableLabel'>Current Transformers</h5>
             <Table striped bordered hover size="sm" id="transTable" className='equipmentTable'>
                 <thead>
                 <tr>

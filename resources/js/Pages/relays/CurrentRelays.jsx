@@ -9,6 +9,8 @@ import DropDown1 from '../components/DropDown1';
 import DropDown3 from '../components/DropDown3';
 import DropDownACDC from '../components/DropDownACDC';
 import ErrorMessage from '../components/ErrorMessage';
+import '../../../css/common styles.css';
+import '../../../css/styleEquipment.css';
 
 export default function CurrentRelays({currentRelays, setFieldValue, substation}){
 
@@ -29,8 +31,8 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
 
     return (
         <>
-            <Row id ='currentLabel'>
-                <Button className="addNew" variant="primary" size="sm" id="add_currentTable" style={{ marginTop: '100px' }}
+            <div className = 'tableLabel' id ='currentLabel'>
+                <Button className="addNew" variant="primary" size="sm" id="add_currentTable" 
                 onClick={(e)=>{
                     if(tableCellParams.length===0){
                         dispatch(addNew(e));
@@ -49,7 +51,7 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
                     Add new
                 </Button>
                 <h5>Current Ralays</h5>
-            </Row>
+            </div>
             <Table striped bordered hover size="sm" id="currentTable" className='equipmentTable'>
                 <thead>
                 <tr>
@@ -100,8 +102,10 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
                             </td>
                             <td>
                                 <Button onClick={(e)=>{
-                                    dispatch(deleteItem({e:e, substation:substation, tableID: 'currentTable'}))
-                                }} variant="danger" size="sm">
+                                    tableCellParams.length===0 
+                                    ? dispatch(deleteItem({e:e, substation:substation, tableID: 'currentTable'}))
+                                    : null;
+                                }} variant="danger" size="sm" type='button'>
                                     Delete
                                 </Button>
                             </td>

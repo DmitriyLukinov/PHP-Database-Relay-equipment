@@ -9,6 +9,8 @@ import { getSubstations, getFiders, addNew, enableReducting, getRelays, applyCha
 import Filter from './components/FilterModal';
 import { showFilter } from '../features/filterSlice';
 import ErrorMessage from './components/ErrorMessage';
+import '../../css/common styles.css';
+import '../../css/styleSF.css';
 
 const Test = ({txt}) => {
  
@@ -58,7 +60,7 @@ const Test = ({txt}) => {
         }}>
         <Form>
           <Card className="card">
-            <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
+            <Navbar expand="lg" className='navBar' fixed="top">
               <Col className='headerCol'>
                 <Button className='navButton' variant="secondary" 
                   onClick={()=>{
@@ -79,23 +81,23 @@ const Test = ({txt}) => {
             </Navbar>
           </Card>
 
-          <Button className="addNew" variant="primary" size="sm" id='add_tableSF' style={{ marginTop: '100px' }}
+          <Button className="addNew" variant="primary" size="sm" id='addNewSF'
             onClick={()=>{dispatch(addNew(row)); }}
           >
             Add new
           </Button>
-          <Table striped bordered hover>
+          <Table striped bordered hover id='tableSF' className='tableClass'>
             <thead>
               <tr><th>{name}</th></tr>
             </thead>
             <tbody>
               {subs.map(function (item, index) {
                 return <tr key={index}>
-                  <td>
+                  <td id='tdTableSF'>
                     {
                       enableReducting(index, row)
                       ?<Field name="sbs_fider" type="text" autoFocus id='substationFider'/>
-                      :<Button variant='link' size='sm' onClick={() => {fiders_relays(item, name)}}>
+                      :<Button variant='link' size='sm' id='data' onClick={() => {fiders_relays(item, name)}}>
                         {item}
                       </Button>
                     }

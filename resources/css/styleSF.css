@@ -1,0 +1,14 @@
+#tdTableSF{
+    display: flex; 
+}
+.tableButton{
+    margin-right: 0.5%;
+}
+#substationFider, #data{
+    width: 50%;
+    margin-right: 45%;
+    text-align: left;
+}
+#addNewSF{
+    margin-top: 100px;
+}

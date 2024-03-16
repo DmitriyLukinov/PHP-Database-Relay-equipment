@@ -87,7 +87,6 @@ export const relaysSlice = createSlice({
                     column: action.payload.column, 
                     table: action.payload.tableID,
                 });
-                console.log(Array.from(state.tableCellParams));
             }
         },
         addNew: (state, action)=>{

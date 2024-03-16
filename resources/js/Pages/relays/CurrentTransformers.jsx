@@ -29,7 +29,7 @@ export default function CurrentTransformers({currentTransformers, setFieldValue,
 
     return(
         <>
-            <Row className ='tableLabel'>
+            <div className ='tableLabel'>
                 <Button onClick={(e)=>{
                     dispatch(addNew(e));
                     for(let i =0; i<3; i++){
@@ -49,7 +49,7 @@ export default function CurrentTransformers({currentTransformers, setFieldValue,
                     Add new
                 </Button>
                 <h5>Current Transformers</h5>
-            </Row>
+            </div>
             <Table striped bordered hover size="sm" id="transTable" className='equipmentTable'>
                 <thead>
                     <tr>                   

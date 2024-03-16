@@ -9,9 +9,7 @@ export default function MeasuringInstruments({measInstruments}){
 
     return (
         <>
-            <Row id ='tableLabel'>
-                <h5>Measuring Instruments</h5>
-            </Row>
+            <h5 className = 'filtTableLabel'>Measuring Instruments</h5>
             <Table striped bordered hover size="sm" id="measuringTable" className='equipmentTable'>
                 <thead>
                 <tr>

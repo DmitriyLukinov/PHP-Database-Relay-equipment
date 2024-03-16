@@ -1,7 +1,9 @@
 import React, {useState,} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорта бутстрап не работает
-import { Row, Table, } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { sortYear, sortSubstation } from '../../features/filterSlice';
+import '../../../css/common styles.css';
+import '../../../css/styleEquipment.css';
 
 export default function CurrentRelays({currentRelays}){
 
@@ -9,9 +11,7 @@ export default function CurrentRelays({currentRelays}){
 
     return (
         <>
-            <Row id ='currentLabel'>
-                <h5>Current Ralays</h5>
-            </Row>
+            <h5 className = 'filtTableLabel' id ='currentLabel'>Current Ralays</h5>
             <Table striped bordered hover size="sm" id="currentTable" className='equipmentTable'>
                 <thead>
                 <tr>

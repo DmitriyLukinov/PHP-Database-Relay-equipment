@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; //без этого импорт�
 import { Modal, Button, Container, Row, Col } from 'react-bootstrap';
 import { selectFilterModal, getFilterRelays, hideFilter } from '../../features/filterSlice';
 import { showPopUp, hidePopUp } from '../../features/relaysSlice';
+import '../../../css/filter form.css';
 
 
 export default function Filter(){

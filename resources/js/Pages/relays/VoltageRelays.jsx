@@ -28,7 +28,7 @@ export default function CurrentRelays({voltageRelays, setFieldValue, substation}
 
     return(
         <>
-            <Row className ='tableLabel'>
+            <div className ='tableLabel'>
                 <Button className="addNew" variant="primary" size="sm" id="add_voltageTable"
                 onClick={(e)=>{
                     dispatch(addNew(e));
@@ -47,7 +47,7 @@ export default function CurrentRelays({voltageRelays, setFieldValue, substation}
                     Add new
                 </Button>
                 <h5>Voltage Ralays</h5>
-            </Row>
+            </div>
             <Table striped bordered hover size="sm" id="voltageTable" className='equipmentTable'>
                 <thead>
                     <tr>

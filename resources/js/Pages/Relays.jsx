@@ -14,6 +14,7 @@ import ItemModal from './components/ItemModal';
 import Filter from './components/FilterModal';
 import { showFilter } from '../features/filterSlice';
 import { getFidersBack } from '../features/subst_fiderSlice';
+import '../../css/common styles.css';
 
 const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTransformers, substation})=>{
 
@@ -123,7 +124,7 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                 ({ setFieldValue, setValues }) =>(
                     <Form>
                         <Card className="card">
-                            <Navbar expand="lg" className="bg-body-tertiary" fixed="top">
+                            <Navbar expand="lg" className="navBar" fixed="top">
                                 <Col className='headerCol'>
                                     <Button className='navButton' variant="secondary" onClick={()=>{
                                         let path = window.location.pathname;
@@ -150,7 +151,7 @@ const Relays = ({currentRelays, voltageRelays, measuringInstruments, currentTran
                                         Filter
                                     </Button>
                                 </Col>
-                                <h4>{substation[0]}-</h4><h4>{substation[1]}</h4>
+                                <h4>{substation[0]}</h4><h4>{substation[1]}</h4>
                                 <h1>Relay equipment</h1>
                             </Navbar>
                         </Card>

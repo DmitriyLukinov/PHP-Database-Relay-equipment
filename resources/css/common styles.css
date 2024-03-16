@@ -1,0 +1,33 @@
+.card, .tableClass, .equipmentTable {
+    margin:0% 0.5%;
+}
+.navBar{
+    background-color: #caa;
+}
+.headerCol{
+    display: flex; 
+    align-items: center;
+    margin-left: 2%;
+}
+.navButton{
+    margin-right: 0.5%;
+}
+.vertical-separator {
+    border-left: 1px solid rgb(0, 0, 0); 
+    height: 2em; 
+    margin-right: 3.5%;
+    margin-left: 3%;
+}
+h1 {
+	font-weight: bold;
+    margin-right: 2%;
+    margin-left: 2%;
+}
+.addNew{
+    margin-bottom: 0.25%;
+    margin-left: 0.5%;
+    margin-right: 2%;
+}
+.tableClass, .equipmentTable{
+    width: 99%;
+}

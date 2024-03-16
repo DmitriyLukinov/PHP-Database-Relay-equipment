@@ -9,9 +9,7 @@ export default function VoltageRelays({voltageRelays}){
 
     return (
         <>
-            <Row id ='tableLabel'>
-                <h5>Voltage Ralays</h5>
-            </Row>
+            <h5 className = 'filtTableLabel'>Voltage Ralays</h5>
             <Table striped bordered hover size="sm" id="voltageTable" className='equipmentTable'>
                 <thead>
                 <tr>

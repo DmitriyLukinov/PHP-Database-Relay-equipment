@@ -28,7 +28,7 @@ export default function MeasuringInstruments({measuringInstruments, setFieldValu
 
     return (
         <>
-            <Row className ='tableLabel'>
+            <div className ='tableLabel'>
                 <Button className="addNew" variant="primary" size="sm" id="add_measuringTable"
                 onClick={(e)=>{
                     dispatch(addNew(e));
@@ -48,7 +48,7 @@ export default function MeasuringInstruments({measuringInstruments, setFieldValu
                     Add new
                 </Button>
                 <h5>Measuring Instruments</h5>
-            </Row>
+            </div>
             <Table striped bordered hover size="sm" id="measuringTable" className='equipmentTable'>
                 <thead>
                     <tr>
