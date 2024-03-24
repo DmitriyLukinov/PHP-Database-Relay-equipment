@@ -56,10 +56,18 @@ class CurrentRelays extends Model
     static private function getFilteredRelays($relayType, $relayRange, $year){
         $currentRelays = self::select();
         count($relayType)> 0 ? $currentRelays->whereIn('relay_type', $relayType) : null;
-        count($relayRange)> 0 ? $currentRelays->whereIn('relay_current', $relayRange) : null;
+        if (count($relayRange) > 0) {
+            $whereRawConditions = [];
+            foreach ($relayRange as $value) {
+                $whereRawConditions[] = 'ABS(relay_current - ' . $value . ') < 0.001';
+            }
+            $currentRelays->whereRaw(implode(' OR ', $whereRawConditions));
+            //$currentRelays->whereRaw('ABS(relay_current - 0.05) < 0.001 OR ABS(relay_current - 30) < 0.001');
+        }
         count($year)> 0 ? $currentRelays->whereIn('year', $year) : null;
         return $currentRelays;
     }
+
     static private function getSubstFider($id, $substation, $fider){
         $obj = $id->belongsToMany(Substation::class, 'substation_current_relay', 'current_relay_id', 'fider_id');
         count($substation)> 0 ? $obj->whereIn('substation', $substation) : null;
@@ -71,16 +79,26 @@ class CurrentRelays extends Model
     static public function getFilteredCurr($substation, $fider, $relayType, $relayRange, $year){
         $currArr = [];
         $currentRelays = self::getFilteredRelays($relayType, $relayRange, $year);
-        $IDs = $currentRelays->select('id')->get();
+        $copy = clone $currentRelays;
+        $IDs = $copy->select('id')->get();
+
         foreach($IDs as $id){
             $copyCurrentRelays = clone $currentRelays;
             $obj = self::getSubstFider($id, $substation, $fider);
-            $curr = $copyCurrentRelays->select('relay_type', 'ac_dc', 'relay_current', 'year', 'quantity')->where('id', $id->id)->get()->toArray();                  
-            foreach($obj as $ob){
-                $ob = array_merge($ob, $curr[0]);
-                array_push($currArr, $ob);
+            $copyCurrentRelays = $copyCurrentRelays->get()->toArray();
+
+            foreach($copyCurrentRelays as $relay){
+                if($relay['id']===$id->id) {
+                    array_shift($relay);
+                    
+                    foreach($obj as $ob){
+                        $o = array_merge($ob, $relay);
+                        array_push($currArr, $o);
+                    }
+                }
             }
         }
+
         return $currArr;
     }
 }

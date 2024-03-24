@@ -27,6 +27,10 @@ class Filter extends Controller
     
         foreach ($keysToSplit as $key) {$input[$key] = $this->splitStringIntoWords($input[$key]);}
 
+        foreach ($input['relayRange'] as $key => $value) {
+            $input['relayRange'][$key] = floatval($value);
+        }
+
         $currentRelays = [];
         $voltageRelays = [];
         $measInstruments = [];

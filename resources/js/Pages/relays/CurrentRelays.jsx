@@ -31,7 +31,7 @@ export default function CurrentRelays({currentRelays, setFieldValue, substation}
 
     return (
         <>
-            <div className = 'tableLabel' id ='currentLabel'>
+            <div className = 'tableLabel'>
                 <Button className="addNew" variant="primary" size="sm" id="add_currentTable" 
                 onClick={(e)=>{
                     if(tableCellParams.length===0){

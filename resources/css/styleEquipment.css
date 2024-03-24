@@ -4,8 +4,8 @@
     align-items: flex-end;
     padding-top: 2%;
 }
-#currentLabel{
-    padding-top: 7.1%;
+#blankBlock{
+    padding-top: 5.1%;
 }
 #currentTable td { 
     background-color: rgba(132, 255, 138, 0.699);

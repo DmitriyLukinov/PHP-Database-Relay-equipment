@@ -31,6 +31,7 @@ const FilteredRelays = ({currentRelays, voltageRelays, measInstruments, currentT
                 <h1>Relay equipment</h1>
             </Navbar>
         </Card>
+        <div id='blankBlock'></div>
         {currentRelays.length > 0 ? <CurrentRelays currentRelays={currentRelays} /> :null}
         {voltageRelays.length > 0 ? <VoltageRelays voltageRelays={voltageRelays} /> : null}
         {measInstruments.length > 0 ? <MeasuringInstruments measInstruments={measInstruments} /> : null}

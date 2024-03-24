@@ -13,11 +13,13 @@ export default function Filter(){
     const show = useSelector(selectFilterModal);
     const dispatch = useDispatch();
 
+    const errNextVerif = 'Use a following format:\n\n "year-month-day" or\n "year-month" or\n "year"';
+
     const validate = (values)=>{
         const errors = {};
         if(values.nextVerification.length===4 || values.nextVerification.length===7 || values.nextVerification.length===10 || values.nextVerification.length===0) dispatch(hidePopUp())
         else {
-            dispatch(showPopUp({message:'pip', column: 'nextVerification'}));
+            dispatch(showPopUp({message:errNextVerif, column: 'nextVerification'}));
             errors.col3='err';
         }
         return errors;
