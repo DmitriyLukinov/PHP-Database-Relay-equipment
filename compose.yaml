@@ -13,7 +13,7 @@ services:
       DB_PORT: 3306
       DB_DATABASE: all_equipment
       DB_USERNAME: root
-      DB_PASSWORD: optimizm666666
+      DB_PASSWORD: popo
     develop:
       watch:
         - action: rebuild
@@ -27,7 +27,7 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: optimizm666666
+      MYSQL_ROOT_PASSWORD: popo
       MYSQL_DATABASE: all_equipment
     volumes:
       - relays:/var/lib/mysql
