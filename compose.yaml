@@ -1,0 +1,43 @@
+name: base
+
+services:
+  app: 
+    container_name: my_relays
+    build:
+      context: .
+    ports:
+      - 127.0.0.1:311:81
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: all_equipment
+      DB_USERNAME: root
+      DB_PASSWORD: optimizm666666
+    develop:
+      watch:
+        - action: rebuild
+          path: ./resources
+        - action: sync
+          path: .
+          target: /var/www/html
+          ignore: 
+            - ./resources
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: optimizm666666
+      MYSQL_DATABASE: all_equipment
+    volumes:
+      - relays:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+
+volumes:
+  relays:
