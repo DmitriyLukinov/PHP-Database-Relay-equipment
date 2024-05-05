@@ -59,14 +59,14 @@ class Message extends Controller
         if($input['substation']!=='Substation'){
             $subs_and_fider = Substation::getSubstationId($input['substation'], $input['itemToDelete']);
             $relays = $subs_and_fider->getRelays();
-            if($relays[0]->isEmpty()===false && $relays[1]->isEmpty()===false &&
-                $relays[2]->isEmpty()===false && $relays[3]->isEmpty()===false){
-                return ['items'=>'deletion prohoibited'];
-            }
-            else {
+            if(count($relays[0])===0 && count($relays[1])===0 &&
+                count($relays[2])===0 && count($relays[3])===0){
                 $subs_and_fider->delete();
                 $fiders = Substation::getFiders($input['substation']);
-                return ['items' => $fiders];
+                return ['items' => $fiders];             
+            }
+            else {
+                return ['items'=>'deletion prohoibited'];
             }
         }
         if($input['substation']==='Substation'){
